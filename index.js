@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (index < text.length) {
             typingElement.textContent += text[index];
             index++;
-            setTimeout(typeText, 100); // Ajusta la velocidad de escritura según tus preferencias
+            setTimeout(typeText, 130);
         }
     }
 
