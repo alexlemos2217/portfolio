@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><radialGradient id="g" cx="75%" cy="30%"><stop stop-color="#183a6c"/><stop offset="1" stop-color="#050608"/></radialGradient></defs>
+  <rect width="1200" height="630" fill="url(#g)"/><circle cx="950" cy="120" r="220" fill="none" stroke="#4c8dff" stroke-opacity=".3"/><circle cx="950" cy="120" r="110" fill="none" stroke="#c0daff" stroke-opacity=".18"/>
+  <text x="70" y="105" fill="#8e96a5" font-family="Arial,sans-serif" font-size="18" letter-spacing="4">SOFTWARE DEVELOPER · MONTEVIDEO</text>
+  <text x="62" y="360" fill="#f6f7f9" font-family="Arial,sans-serif" font-weight="600" font-size="112" letter-spacing="-7">ALEXANDER</text><text x="62" y="485" fill="none" stroke="#f6f7f9" stroke-opacity=".65" font-family="Arial,sans-serif" font-weight="600" font-size="130" letter-spacing="-7">LEMOS</text>
+  <circle cx="72" cy="555" r="6" fill="#4c8dff"/><text x="92" y="562" fill="#c0daff" font-family="Arial,sans-serif" font-size="18">Software para necesidades reales.</text>
+</svg>
