@@ -296,7 +296,7 @@ function createRumboScene() {
   } catch { body.classList.add('rumbo-webgl-failed'); }
 }
 
-function chapterConfig(trigger, id, distance, scrub = .26) {
+function chapterConfig(trigger, id, distance, scrub = .18) {
   return { trigger, id, pin: true, pinSpacing: true, start: 'top top', end: typeof distance === 'function' ? () => `+=${distance()}` : `+=${distance}`, scrub: reducedMotion ? true : scrub, markers: motionDebug, anticipatePin: 1, invalidateOnRefresh: true };
 }
 
@@ -312,7 +312,7 @@ function initMotion() {
 
   gsap.to('.progress i', { scaleY: 1, scrollTrigger: { id: 'page-progress', trigger: body, start: 'top top', end: 'bottom bottom', scrub: .2 } });
 
-  const intro = gsap.timeline({ scrollTrigger: chapterConfig('.intro', 'chapter-intro', () => vh() * (mobile ? 1.15 : 1.35)) });
+  const intro = gsap.timeline({ scrollTrigger: chapterConfig('.intro', 'chapter-intro', () => vh() * (mobile ? .95 : 1.15), .18) });
   intro.addLabel('reveal', 0)
     .from('.intro h1 .line i', { yPercent: 105, stagger: .08, duration: .22 }, 'reveal')
     .from('.intro-meta,.intro-copy>.overline', { opacity: 0, y: 30, duration: .18 }, 'reveal+=.06')
@@ -326,7 +326,7 @@ function initMotion() {
     .to('.intro-canvas', { backgroundColor: '#08090b', duration: .28 }, 'handoff')
     .to('.orb', { xPercent: 32, scale: .55, opacity: 0, duration: .28 }, 'handoff');
 
-  const portrait = gsap.timeline({ scrollTrigger: chapterConfig('.portrait-scene', 'chapter-portrait', () => vh() * (mobile ? 1.25 : 1.45)) });
+  const portrait = gsap.timeline({ scrollTrigger: chapterConfig('.portrait-scene', 'chapter-portrait', () => vh() * (mobile ? 1.05 : 1.2), .2) });
   portrait.addLabel('concealed', 0)
     .set('.portrait-frame', { autoAlpha: 1 })
     .fromTo('.portrait-intro h2', { yPercent: 50, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .16 }, 'concealed')
@@ -348,7 +348,7 @@ function initMotion() {
   const camera = { zoom: 10.4, bearing: -8, pitch: 28 };
   const place = gsap.timeline({
     scrollTrigger: {
-      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 2.05 : 2.35), .22),
+      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 1.7 : 1.9), .16),
       onUpdate: self => {
         if (map && self.progress > .25) map.jumpTo({ center: [-56.1645, -34.9011], zoom: camera.zoom, bearing: camera.bearing, pitch: camera.pitch });
         rumboScene?.setProgress(Math.max(0, Math.min(1, (self.progress - .47) / .39)));
@@ -395,7 +395,7 @@ function initMotion() {
     .to('.rumbo-editorial,.rumbo-explore', { opacity: 0, y: -24, duration: .04 }, 'next-chapter')
     .to('.rumbo-world', { opacity: 0, scale: 1.025, duration: .04 }, 'next-chapter');
 
-  const reg = gsap.timeline({ scrollTrigger: chapterConfig('.regcrim', 'chapter-regcrim', () => vh() * (mobile ? 1.2 : 1.4)) });
+  const reg = gsap.timeline({ scrollTrigger: chapterConfig('.regcrim', 'chapter-regcrim', () => vh() * (mobile ? 1.05 : 1.15), .18) });
   reg.addLabel('distance', 0)
     .fromTo('.regcrim .product-copy', { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: .18 }, 'distance')
     .fromTo('.reg-interface', { opacity: 0, scale: .52, rotationY: -24, rotationX: 10, xPercent: 22, transformPerspective: 1400 }, { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, xPercent: 0, duration: .3 }, 'distance')
@@ -408,7 +408,7 @@ function initMotion() {
     .addLabel('exit', .86)
     .to('.reg-interface', { opacity: 0, xPercent: -80, duration: .14 }, 'exit');
 
-  const daw = gsap.timeline({ scrollTrigger: chapterConfig('.daw', 'chapter-daw', () => vh() * (mobile ? 1.3 : 1.5)) });
+  const daw = gsap.timeline({ scrollTrigger: chapterConfig('.daw', 'chapter-daw', () => vh() * (mobile ? 1.1 : 1.25), .2) });
   daw.addLabel('signal', 0)
     .fromTo('.daw .product-copy', { opacity: 0, x: mobile ? -35 : -90 }, { opacity: 1, x: 0, duration: .16 }, 'signal')
     .fromTo('.daw-interface', { opacity: 0, yPercent: 42, scale: .58, rotationX: 28, rotationZ: -3, transformPerspective: 1500, transformOrigin: '50% 100%' }, { opacity: 1, yPercent: 0, scale: 1, rotationX: 5, rotationZ: 0, duration: .27 }, 'signal')
@@ -422,7 +422,7 @@ function initMotion() {
     .addLabel('handoff', .87)
     .to('.daw-interface', { opacity: 0, yPercent: -48, xPercent: 14, rotationZ: 2, duration: .13 }, 'handoff');
 
-  const ops = gsap.timeline({ scrollTrigger: chapterConfig('.secretaria', 'chapter-secretaria', () => vh() * (mobile ? 1.2 : 1.4)) });
+  const ops = gsap.timeline({ scrollTrigger: chapterConfig('.secretaria', 'chapter-secretaria', () => vh() * (mobile ? 1.05 : 1.15), .18) });
   ops.addLabel('surface', 0)
     .fromTo('.secretaria .product-copy', { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: .18 }, 'surface')
     .fromTo('.ops-interface', { opacity: 0, scale: .65, z: -300, rotationX: 12, transformPerspective: 1300 }, { opacity: 1, scale: 1, z: 0, rotationX: 0, duration: .26 }, 'surface')
@@ -435,7 +435,7 @@ function initMotion() {
     .addLabel('exit', .87)
     .to('.ops-interface', { xPercent: -120, opacity: 0, duration: .13 }, 'exit');
 
-  const nexus = gsap.timeline({ scrollTrigger: chapterConfig('.nexus', 'chapter-nexus', () => vh() * (mobile ? 1.2 : 1.4)) });
+  const nexus = gsap.timeline({ scrollTrigger: chapterConfig('.nexus', 'chapter-nexus', () => vh() * (mobile ? 1.05 : 1.15), .18) });
   nexus.addLabel('type', 0)
     .fromTo('.nexus .product-copy', { opacity: 0, x: -70 }, { opacity: 1, x: 0, duration: .16 }, 'type')
     .fromTo('.nexus-interface', { opacity: 0, scale: .7, rotationY: 20, transformPerspective: 1300 }, { opacity: 1, scale: 1, rotationY: 0, duration: .25 }, 'type')
