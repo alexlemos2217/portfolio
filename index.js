@@ -11,7 +11,6 @@ const menu = document.querySelector('#menu');
 const menuButton = document.querySelector('.menu-button');
 const langButton = document.querySelector('.lang');
 function enableCinematicMotionStyles() {
-  if (reducedMotion) return;
   for (const sheet of document.styleSheets) {
     try {
       for (const rule of sheet.cssRules) {
@@ -297,16 +296,16 @@ function createRumboScene() {
 }
 
 function chapterConfig(trigger, id, distance, scrub = .26) {
-  return { trigger, id, pin: true, pinSpacing: true, start: 'top top', end: typeof distance === 'function' ? () => `+=${distance()}` : `+=${distance}`, scrub, markers: motionDebug, anticipatePin: 1, invalidateOnRefresh: true };
+  return { trigger, id, pin: true, pinSpacing: true, start: 'top top', end: typeof distance === 'function' ? () => `+=${distance()}` : `+=${distance}`, scrub: reducedMotion ? true : scrub, markers: motionDebug, anticipatePin: 1, invalidateOnRefresh: true };
 }
 
 function initMotion() {
-  if (reducedMotion || !window.gsap || !window.ScrollTrigger) {
+  if (!window.gsap || !window.ScrollTrigger) {
     body.classList.add('motion-static');
     return;
   }
   const mobile = innerWidth <= 820;
-  const vh = () => innerHeight;
+  const vh = () => innerHeight * (reducedMotion ? .72 : 1);
   gsap.registerPlugin(ScrollTrigger);
   gsap.defaults({ ease: 'none' });
 
@@ -498,11 +497,11 @@ addEventListener('pagehide', () => {
 }, { once: true });
 
 async function boot() {
+  root.dataset.motion = reducedMotion ? 'reduced' : 'full';
   enableCinematicMotionStyles();
   resizeCanvas();
   renderEarthFrame(0);
-  if (!reducedMotion) createRumboScene();
-  else body.classList.add('motion-static', 'rumbo-webgl-failed');
+  createRumboScene();
   const portrait = document.querySelector('.portrait-frame img');
   await Promise.race([
     Promise.allSettled([document.fonts?.ready, portrait?.decode?.()]),

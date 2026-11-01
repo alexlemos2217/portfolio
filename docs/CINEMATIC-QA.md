@@ -2,6 +2,8 @@
 
 Validated locally on 2026-11-01. Production was not changed.
 
+Emergency recovery validation: captured 35 checkpoints (0/25/50/75/100 for all seven cinematic chapters) in full motion, then repeated transform/progress assertions in reduced motion. Both modes registered 11 valid ScrollTriggers; reduced motion retained the 3D Rumbo device with immediate scrub and 28% shorter pin ranges.
+
 ## Deterministic chapter review
 
 - Captured intro, portrait, place/Rumbo, REGCRIM, Secretaría, and Nexus at 0%, 25%, 50%, 75%, and 100% scroll progress.
@@ -26,7 +28,7 @@ Portrait hero reviewed at 1920x1080, 1440x900, 768x1024, 390x844, and 360x800. T
 - Direct chapter hashes resolve after ScrollTrigger geometry is measured.
 - Spanish/English content switching remains functional.
 - Project context dialog opens with the selected project and closes correctly.
-- `prefers-reduced-motion: reduce` now produces a static layout with zero ScrollTriggers and no WebGL device allocation.
+- `prefers-reduced-motion: reduce` keeps the seven scroll-driven chapters and the Rumbo WebGL device, but shortens pin distances by 28% and uses immediate scrub. It no longer collapses the portfolio into a static layout.
 - Missing portrait image preserves layout dimensions and alternative text.
 - Failed map tiles activate the designed map fallback while the chapter timelines remain active.
 - The Rumbo WebGL canvas initializes at the device pixel ratio cap, renders on scroll updates, and does not run a permanent animation loop.
