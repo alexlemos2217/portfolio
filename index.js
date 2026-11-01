@@ -198,6 +198,8 @@ class RumboDeviceScene {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth < 820 ? 1.3 : 1.7));
     this.renderer.outputColorSpace = T.SRGBColorSpace; this.renderer.toneMapping = T.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.05;
     this.scene = new T.Scene();
+    const environmentFaces = [0xc7d7d5, 0x20282b, 0xf7eee1, 0x101719, 0x8fa9ac, 0x30383b].map(color => { const face = document.createElement('canvas'); face.width = face.height = 64; const context = face.getContext('2d'); const gradient = context.createLinearGradient(0, 0, 64, 64); gradient.addColorStop(0, `#${color.toString(16).padStart(6, '0')}`); gradient.addColorStop(1, '#111719'); context.fillStyle = gradient; context.fillRect(0, 0, 64, 64); return face; });
+    this.environment = new T.CubeTexture(environmentFaces); this.environment.colorSpace = T.SRGBColorSpace; this.environment.needsUpdate = true; this.scene.environment = this.environment;
     this.camera = new T.PerspectiveCamera(35, 1, .1, 100); this.camera.position.set(0, 0, 14.6);
     this.phone = new T.Group(); this.scene.add(this.phone);
 
@@ -280,7 +282,7 @@ class RumboDeviceScene {
     this.drawScreen(p < .27 ? 0 : p < .4 ? 1 : p < .52 ? 2 : 3); this.camera.position.z = mix(14.6, 13.3, segment(.28, .7)); this.render();
   }
   render() { this.renderer.render(this.scene, this.camera); }
-  dispose() { this.scene.traverse(node => { node.geometry?.dispose(); if (node.material) { node.material.map?.dispose(); node.material.dispose(); } }); this.screenTexture?.dispose(); this.renderer.dispose(); }
+  dispose() { this.scene.traverse(node => { node.geometry?.dispose(); if (node.material) { node.material.map?.dispose(); node.material.dispose(); } }); this.screenTexture?.dispose(); this.environment?.dispose(); this.renderer.dispose(); }
 }
 
 let rumboScene;
@@ -340,10 +342,10 @@ function initMotion() {
   const camera = { zoom: 10.4, bearing: -8, pitch: 28 };
   const place = gsap.timeline({
     scrollTrigger: {
-      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 3.35 : 3.75), .48),
+      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 3.65 : 4.05), .48),
       onUpdate: self => {
         if (map && self.progress > .34) map.jumpTo({ center: [-56.1645, -34.9011], zoom: camera.zoom, bearing: camera.bearing, pitch: camera.pitch });
-        rumboScene?.setProgress(Math.max(0, Math.min(1, (self.progress - .42) / .58)));
+        rumboScene?.setProgress(Math.max(0, Math.min(1, (self.progress - .54) / .36)));
       }
     }
   });
@@ -359,27 +361,28 @@ function initMotion() {
     .set('#map', { visibility: 'visible' }, 'uruguay')
     .to('#map,.map-shade,.map-credit', { opacity: 1, duration: .13 }, 'uruguay')
     .to(camera, { zoom: 12.1, bearing: -2, pitch: 36, duration: .13 }, 'uruguay')
-    .addLabel('montevideo', .48)
-    .from('.city-copy', { opacity: 0, y: 85, duration: .15 }, 'montevideo')
-    .to(camera, { zoom: 13.8, bearing: 8, pitch: 46, duration: .18 }, 'montevideo')
-    .addLabel('arrival', .42)
-    .to('.city-copy', { opacity: 0, y: -65, duration: .08 }, 'arrival')
+    .addLabel('montevideo', .4)
+    .from('.city-copy', { opacity: 0, y: 85, duration: .12 }, 'montevideo')
+    .to(camera, { zoom: 13.8, bearing: 8, pitch: 46, duration: .14 }, 'montevideo')
+    .addLabel('arrival', .54)
+    .to('.city-copy', { opacity: 0, y: -65, duration: .07 }, 'arrival')
     .fromTo('.rumbo-map-label', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .07 }, 'arrival')
     .to('#map', { scale: 1.16, filter: 'saturate(.35) brightness(.42)', duration: .07 }, 'arrival')
-    .addLabel('device', .49)
-    .to('.rumbo-map-label', { opacity: 0, y: -30, duration: .06 }, 'device')
-    .to('#map', { opacity: .18, scale: 1.28, duration: .09 }, 'device')
-    .fromTo('.rumbo-product-title', { opacity: 0, x: -45 }, { opacity: 1, x: 0, duration: .09 }, 'device')
-    .addLabel('experience', .58)
-    .to('.rumbo-product-title', { opacity: .2, x: mobile ? -18 : -75, duration: .1 }, 'experience')
-    .fromTo('.rumbo-chapter', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: .1 }, 'experience')
-    .addLabel('into-product', .68)
-    .to('.rumbo-product-title,.rumbo-chapter', { opacity: 0, duration: .1 }, 'into-product')
-    .to('#map,.map-shade,.map-credit', { opacity: 0, duration: .1 }, 'into-product')
-    .addLabel('beyond-screen', .78)
-    .to('#rumbo-webgl', { opacity: .28, duration: .09 }, 'beyond-screen')
-    .to('.rumbo-world', { clipPath: 'circle(75% at 50% 50%)', scale: 1, duration: .09 }, 'beyond-screen')
-    .addLabel('discover-uruguay', .87)
+    .addLabel('hardware-reveal', .6)
+    .to('.rumbo-map-label', { opacity: 0, y: -30, duration: .06 }, 'hardware-reveal')
+    .to('#map', { opacity: .18, scale: 1.28, duration: .08 }, 'hardware-reveal')
+    .addLabel('hero-product', .68)
+    .fromTo('.rumbo-product-title', { opacity: 0, x: -45 }, { opacity: 1, x: 0, duration: .08 }, 'hero-product')
+    .addLabel('app-exploration', .74)
+    .to('.rumbo-product-title', { opacity: .2, x: mobile ? -18 : -75, duration: .08 }, 'app-exploration')
+    .fromTo('.rumbo-chapter', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: .08 }, 'app-exploration')
+    .addLabel('immersion', .8)
+    .to('.rumbo-product-title,.rumbo-chapter', { opacity: 0, duration: .07 }, 'immersion')
+    .to('#map,.map-shade,.map-credit', { opacity: 0, duration: .07 }, 'immersion')
+    .addLabel('enter-product', .86)
+    .to('#rumbo-webgl', { opacity: .28, duration: .06 }, 'enter-product')
+    .to('.rumbo-world', { clipPath: 'circle(75% at 50% 50%)', scale: 1, duration: .06 }, 'enter-product')
+    .addLabel('discover-uruguay', .9)
     .to('#rumbo-webgl', { opacity: 0, duration: .08 }, 'discover-uruguay')
     .fromTo('.rumbo-editorial', { opacity: 0, y: 45 }, { opacity: 1, y: 0, duration: .08 }, 'discover-uruguay')
     .to('.rumbo-explore', { autoAlpha: 1, duration: .08 }, 'discover-uruguay')
