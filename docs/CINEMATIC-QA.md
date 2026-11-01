@@ -7,6 +7,8 @@ Validated locally on 2026-11-01. Production was not changed.
 - Captured intro, portrait, place/Rumbo, REGCRIM, Secretaría, and Nexus at 0%, 25%, 50%, 75%, and 100% scroll progress.
 - Reviewed DAW at 0%, 30%, 62%, 87%, and 100%, then reversed through the same scene; verified its English copy, private technical dialog, mobile layout, and absence from archive/trajectory classifications.
 - Rechecked the Montevideo/Rumbo triggers and WebGL initialization after inserting the new project chapter.
+- Rebuilt Rumbo hardware from separate metal chassis, bezel, screen and glass layers; replaced gradient placeholders with three original conceptual travel photographs and a richer four-state app UI.
+- Disabled all MapLibre pointer interaction so wheel input always remains page scroll while the timeline controls the automatic Montevideo camera.
 - Confirmed ScrollTrigger and animation progress converge to the same value at every checkpoint.
 - Confirmed all six chapters use `pin`, `scrub`, named timeline labels, and responsive end distances.
 - Confirmed reverse scrolling restores the exact prior state (`1.00 -> 0.25`).

@@ -113,7 +113,7 @@ function createMap() {
     bearing: -8,
     pitch: 28,
     attributionControl: false,
-    interactive: true,
+    interactive: false,
     fadeDuration: 0,
     style: {
       version: 8,
@@ -191,85 +191,96 @@ function renderEarthFrame(frame) {
 
 class RumboDeviceScene {
   constructor(canvas) {
-    this.canvas = canvas;
-    this.progress = 0;
-    this.lastScreen = -1;
-    this.active = false;
     if (!canvas || !window.THREE) throw new Error('WebGL unavailable');
+    this.canvas = canvas; this.progress = 0; this.lastScreen = -1;
     const T = window.THREE;
     this.renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth < 820 ? 1.35 : 1.8));
-    this.renderer.outputColorSpace = T.SRGBColorSpace;
-    this.renderer.toneMapping = T.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.15;
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth < 820 ? 1.3 : 1.7));
+    this.renderer.outputColorSpace = T.SRGBColorSpace; this.renderer.toneMapping = T.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.05;
     this.scene = new T.Scene();
-    this.camera = new T.PerspectiveCamera(32, 1, .1, 100);
-    this.camera.position.set(0, 0, 13.5);
-    this.phone = new T.Group();
-    this.scene.add(this.phone);
-    const shape = new T.Shape();
-    const w = 3.08, h = 6.28, r = .34;
-    shape.moveTo(-w / 2 + r, -h / 2); shape.lineTo(w / 2 - r, -h / 2); shape.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r); shape.lineTo(w / 2, h / 2 - r); shape.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2); shape.lineTo(-w / 2 + r, h / 2); shape.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); shape.lineTo(-w / 2, -h / 2 + r); shape.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
-    const bodyGeometry = new T.ExtrudeGeometry(shape, { depth: .34, bevelEnabled: true, bevelSegments: 6, steps: 1, bevelSize: .08, bevelThickness: .07, curveSegments: 18 });
-    bodyGeometry.center();
-    const bodyMaterial = new T.MeshPhysicalMaterial({ color: 0x161a1d, metalness: .92, roughness: .24, clearcoat: 1, clearcoatRoughness: .18 });
-    this.phone.add(new T.Mesh(bodyGeometry, bodyMaterial));
-    const glass = new T.Mesh(new T.PlaneGeometry(2.82, 5.95, 1, 1), new T.MeshPhysicalMaterial({ color: 0xffffff, roughness: .08, transmission: .05, clearcoat: 1 }));
-    glass.position.z = .255; this.phone.add(glass);
-    this.screenCanvas = document.createElement('canvas'); this.screenCanvas.width = 900; this.screenCanvas.height = 1800;
-    this.screenContext = this.screenCanvas.getContext('2d');
+    this.camera = new T.PerspectiveCamera(35, 1, .1, 100); this.camera.position.set(0, 0, 14.6);
+    this.phone = new T.Group(); this.scene.add(this.phone);
+
+    const roundedShape = (w, h, r) => { const s = new T.Shape(); s.moveTo(-w / 2 + r, -h / 2); s.lineTo(w / 2 - r, -h / 2); s.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r); s.lineTo(w / 2, h / 2 - r); s.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2); s.lineTo(-w / 2 + r, h / 2); s.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); s.lineTo(-w / 2, -h / 2 + r); s.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2); return s; };
+    const chassisShape = roundedShape(3.02, 6.34, .44);
+    const chassisGeo = new T.ExtrudeGeometry(chassisShape, { depth: .22, bevelEnabled: true, bevelSegments: 8, bevelSize: .055, bevelThickness: .045, curveSegments: 24 }); chassisGeo.center();
+    const chassis = new T.Mesh(chassisGeo, new T.MeshPhysicalMaterial({ color: 0x9b9b96, metalness: .92, roughness: .2, clearcoat: .75, clearcoatRoughness: .16 })); this.phone.add(chassis);
+    const back = new T.Mesh(new T.ShapeGeometry(roundedShape(2.9, 6.2, .39), 24), new T.MeshPhysicalMaterial({ color: 0x1d2222, metalness: .18, roughness: .38, clearcoat: .6, clearcoatRoughness: .22 })); back.position.z = -.185; back.rotation.y = Math.PI; this.phone.add(back);
+    const bezelShape = roundedShape(2.94, 6.25, .41); bezelShape.holes.push(roundedShape(2.82, 6.12, .34));
+    const bezel = new T.Mesh(new T.ShapeGeometry(bezelShape, 24), new T.MeshPhysicalMaterial({ color: 0x090b0c, metalness: .65, roughness: .22, clearcoat: 1, clearcoatRoughness: .08 })); bezel.position.z = .185; this.phone.add(bezel);
+
+    this.screenCanvas = document.createElement('canvas'); this.screenCanvas.width = 900; this.screenCanvas.height = 1950; this.screenContext = this.screenCanvas.getContext('2d');
     this.screenTexture = new T.CanvasTexture(this.screenCanvas); this.screenTexture.colorSpace = T.SRGBColorSpace; this.screenTexture.anisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy());
-    const screen = new T.Mesh(new T.PlaneGeometry(2.7, 5.82), new T.MeshBasicMaterial({ map: this.screenTexture, toneMapped: false }));
-    screen.position.z = .272; this.phone.add(screen);
-    const speaker = new T.Mesh(new T.CapsuleGeometry(.07, .52, 4, 12), new T.MeshStandardMaterial({ color: 0x050606, metalness: .7, roughness: .35 }));
-    speaker.rotation.z = Math.PI / 2; speaker.position.set(0, 2.72, .31); this.phone.add(speaker);
-    const side = new T.MeshStandardMaterial({ color: 0x30363a, metalness: 1, roughness: .22 });
-    [[-1.65, 1.3, .42], [-1.65, .48, .66], [1.65, .9, .78]].forEach(([x, y, sy]) => { const button = new T.Mesh(new T.BoxGeometry(.08, sy, .14), side); button.position.set(x, y, .02); this.phone.add(button); });
-    const key = new T.DirectionalLight(0xddeaff, 4.4); key.position.set(-4, 5, 8); this.scene.add(key);
-    const rim = new T.DirectionalLight(0x78a8ff, 3.2); rim.position.set(5, -1, 3); this.scene.add(rim);
-    this.scene.add(new T.HemisphereLight(0xe9f5ff, 0x061018, 1.7));
+    const screen = new T.Mesh(new T.PlaneGeometry(2.81, 6.1), new T.MeshBasicMaterial({ map: this.screenTexture, toneMapped: false })); screen.position.z = .196; this.phone.add(screen);
+    const glass = new T.Mesh(new T.PlaneGeometry(2.84, 6.13), new T.MeshPhysicalMaterial({ color: 0xdff5f5, transparent: true, opacity: .09, roughness: .04, metalness: 0, transmission: .28, clearcoat: 1, clearcoatRoughness: .03 })); glass.position.z = .207; this.phone.add(glass);
+    const island = new T.Mesh(new T.CapsuleGeometry(.105, .42, 8, 18), new T.MeshPhysicalMaterial({ color: 0x020303, metalness: .25, roughness: .18, clearcoat: 1 })); island.rotation.z = Math.PI / 2; island.position.set(0, 2.84, .225); this.phone.add(island);
+    const sensor = new T.Mesh(new T.SphereGeometry(.045, 16, 10), new T.MeshBasicMaterial({ color: 0x173140 })); sensor.position.set(.14, 2.84, .335); this.phone.add(sensor);
+    const buttonMaterial = new T.MeshPhysicalMaterial({ color: 0xa9aaa6, metalness: .95, roughness: .18, clearcoat: .6 });
+    [[-1.57, 1.28, .34], [-1.57, .63, .54], [1.57, .92, .68]].forEach(([x, y, sy]) => { const button = new T.Mesh(new T.BoxGeometry(.035, sy, .105), buttonMaterial); button.position.set(x, y, -.005); this.phone.add(button); });
+    const shadow = new T.Mesh(new T.PlaneGeometry(6.4, 8.5), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .22, depthWrite: false })); shadow.position.set(.55, -.6, -1.1); shadow.rotation.z = -.06; this.phone.add(shadow);
+
+    const key = new T.RectAreaLight(0xfff6e8, 5.2, 5, 8); key.position.set(-4, 5, 7); key.lookAt(0, 0, 0); this.scene.add(key);
+    const rim = new T.RectAreaLight(0x7fc5d2, 4.3, 4, 7); rim.position.set(5, 1, 4); rim.lookAt(0, 0, 0); this.scene.add(rim);
+    const fill = new T.DirectionalLight(0xc4b5ff, 1.8); fill.position.set(0, -4, 5); this.scene.add(fill);
+    this.scene.add(new T.HemisphereLight(0xf4f7f3, 0x07100f, 1.25));
+
+    this.destinationImages = ['img/rumbo-costa-premium.jpg', 'img/rumbo-sierras-premium.jpg', 'img/rumbo-montevideo-premium.jpg'].map(src => { const image = new Image(); image.decoding = 'async'; image.onload = () => this.drawScreen(this.lastScreen < 0 ? 0 : this.lastScreen, true); image.src = src; return image; });
     this.drawScreen(0); this.resize(); this.setProgress(0);
   }
-  drawScreen(stage) {
-    if (stage === this.lastScreen) return;
-    this.lastScreen = stage;
-    const c = this.screenContext, w = this.screenCanvas.width, h = this.screenCanvas.height;
-    c.clearRect(0, 0, w, h); c.fillStyle = '#e7eee8'; c.fillRect(0, 0, w, h);
-    c.fillStyle = '#10221b'; c.font = '700 44px Arial'; c.fillText('RUMBO', 58, 92); c.font = '500 24px Arial'; c.fillText('UY', 790, 90);
+  roundRect(c, x, y, w, h, r) { c.beginPath(); c.roundRect(x, y, w, h, r); }
+  photo(c, image, x, y, w, h, r, fallback) {
+    c.save(); this.roundRect(c, x, y, w, h, r); c.clip();
+    if (image?.complete && image.naturalWidth) { const ratio = Math.max(w / image.naturalWidth, h / image.naturalHeight); const sw = w / ratio, sh = h / ratio; c.drawImage(image, (image.naturalWidth - sw) / 2, (image.naturalHeight - sh) / 2, sw, sh, x, y, w, h); }
+    else { const g = c.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, fallback); g.addColorStop(1, '#173f46'); c.fillStyle = g; c.fillRect(x, y, w, h); }
+    c.restore();
+  }
+  brandHeader(c) {
+    c.fillStyle = '#f7f6f1'; c.fillRect(0, 0, 900, 1950);
+    c.fillStyle = '#10221b'; c.beginPath(); c.arc(78, 110, 30, 0, Math.PI * 2); c.fill(); c.strokeStyle = '#f7f6f1'; c.lineWidth = 3; c.beginPath(); c.moveTo(65, 120); c.lineTo(82, 98); c.lineTo(91, 116); c.stroke();
+    c.fillStyle = '#10221b'; c.font = '700 43px Manrope, Arial'; c.fillText('RUMBO', 128, 124); c.font = '600 20px Manrope, Arial'; c.fillStyle = '#6c7a74'; c.fillText('UY', 790, 120);
+  }
+  bottomNav(c, active = 0) {
+    c.fillStyle = '#f7f6f1ee'; c.fillRect(0, 1780, 900, 170); const labels = ['INICIO', 'EXPLORAR', 'GUARDADOS'];
+    labels.forEach((label, i) => { const x = 170 + i * 280; c.fillStyle = i === active ? '#173f35' : '#8b958f'; c.beginPath(); c.arc(x, 1830, i === active ? 12 : 8, 0, Math.PI * 2); c.fill(); c.font = `${i === active ? '700' : '500'} 17px Manrope, Arial`; c.textAlign = 'center'; c.fillText(label, x, 1880); }); c.textAlign = 'left';
+  }
+  drawScreen(stage, force = false) {
+    if (stage === this.lastScreen && !force) return; this.lastScreen = stage;
+    const c = this.screenContext; c.clearRect(0, 0, 900, 1950); this.brandHeader(c);
     if (stage === 0) {
-      c.fillStyle = '#3f6f62'; c.font = '500 25px Arial'; c.fillText('DESCUBRÍ URUGUAY', 58, 235); c.fillStyle = '#10221b'; c.font = '700 72px Arial'; c.fillText('¿Hacia dónde', 58, 345); c.fillText('vamos?', 58, 425);
-      c.strokeStyle = '#9bb1a8'; c.lineWidth = 3; this.roundRect(c, 58, 510, 784, 110, 55); c.stroke(); c.font = '400 27px Arial'; c.fillText('Buscar destinos', 95, 580);
-      this.paintLandscape(c, 58, 720, 784, 860); c.fillStyle = 'white'; c.font = '700 62px Arial'; c.fillText('COSTA', 105, 1460); c.font = '400 25px Arial'; c.fillText('Rutas  ·  Naturaleza  ·  Mar', 105, 1510);
+      c.fillStyle = '#597068'; c.font = '600 22px Manrope, Arial'; c.fillText('DESCUBRÍ URUGUAY', 58, 245);
+      c.fillStyle = '#12231c'; c.font = '700 70px Manrope, Arial'; c.fillText('¿Hacia dónde', 58, 348); c.fillText('vamos hoy?', 58, 425);
+      c.fillStyle = '#ecece6'; this.roundRect(c, 58, 490, 784, 106, 53); c.fill(); c.fillStyle = '#76817c'; c.font = '500 25px Manrope, Arial'; c.fillText('Buscar destinos, rutas, paisajes', 104, 557); c.font = '500 30px Arial'; c.fillText('⌕', 782, 557);
+      ['COSTA', 'SIERRAS', 'CIUDAD'].forEach((label, i) => { const x = 58 + i * 208; c.fillStyle = i === 0 ? '#163f34' : '#e8e8e1'; this.roundRect(c, x, 646, 184, 68, 34); c.fill(); c.fillStyle = i === 0 ? '#fff' : '#41534b'; c.font = '600 19px Manrope, Arial'; c.textAlign = 'center'; c.fillText(label, x + 92, 690); }); c.textAlign = 'left';
+      this.photo(c, this.destinationImages[0], 58, 770, 784, 860, 56, '#789c83'); const shade = c.createLinearGradient(0, 1170, 0, 1630); shade.addColorStop(0, '#08120d00'); shade.addColorStop(1, '#08120dd8'); c.fillStyle = shade; this.roundRect(c, 58, 770, 784, 860, 56); c.fill();
+      c.fillStyle = '#dff1e8'; c.font = '600 20px Manrope, Arial'; c.fillText('DESTINO DESTACADO', 105, 1450); c.fillStyle = '#fff'; c.font = '700 58px Manrope, Arial'; c.fillText('Costa atlántica', 105, 1525); c.font = '500 23px Manrope, Arial'; c.fillText('Dunas · mar · horizonte', 105, 1580); this.bottomNav(c, 0);
     } else if (stage === 1) {
-      c.fillStyle = '#315f52'; c.font = '500 25px Arial'; c.fillText('EXPLORAR', 58, 220); c.fillStyle = '#10221b'; c.font = '700 66px Arial'; c.fillText('Destinos', 58, 330);
-      ['COSTA', 'SIERRAS', 'CIUDADES'].forEach((label, index) => { const y = 430 + index * 410; this.paintLandscape(c, 58, y, 784, 340, index); c.fillStyle = 'white'; c.font = '700 38px Arial'; c.fillText(label, 90, y + 285); });
+      c.fillStyle = '#597068'; c.font = '600 22px Manrope, Arial'; c.fillText('COLECCIONES CURADAS', 58, 250); c.fillStyle = '#12231c'; c.font = '700 67px Manrope, Arial'; c.fillText('Tres formas', 58, 350); c.fillText('de recorrer.', 58, 425);
+      ['COSTA', 'SIERRAS', 'CIUDADES'].forEach((label, i) => { const y = 500 + i * 405; this.photo(c, this.destinationImages[i], 58, y, 784, 350, 42, ['#789c83','#697b56','#38596b'][i]); const g = c.createLinearGradient(0, y + 120, 0, y + 350); g.addColorStop(0, '#06110b00'); g.addColorStop(1, '#06110bc9'); c.fillStyle = g; this.roundRect(c, 58, y, 784, 350, 42); c.fill(); c.fillStyle = '#fff'; c.font = '700 38px Manrope, Arial'; c.fillText(label, 92, y + 285); c.font = '500 18px Manrope, Arial'; c.fillText(i === 0 ? 'MAR Y DUNAS' : i === 1 ? 'CERROS Y SENDEROS' : 'CULTURA Y RAMBLA', 92, y + 320); }); this.bottomNav(c, 1);
     } else if (stage === 2) {
-      c.fillStyle = '#315f52'; c.font = '500 25px Arial'; c.fillText('MAPA CONCEPTUAL', 58, 220); c.fillStyle = '#d7e4dd'; c.fillRect(58, 300, 784, 1280); c.strokeStyle = '#6f9a8e'; c.lineWidth = 3;
-      for (let n = -600; n < 1200; n += 115) { c.beginPath(); c.moveTo(58, 500 + n); c.lineTo(842, 1050 + n); c.stroke(); c.beginPath(); c.moveTo(58, 1200 - n); c.lineTo(842, 650 - n); c.stroke(); }
-      [[230,620],[610,510],[450,980],[700,1240]].forEach(([x,y])=>{c.beginPath();c.fillStyle='#174f43';c.arc(x,y,22,0,Math.PI*2);c.fill();c.lineWidth=8;c.strokeStyle='white';c.stroke()});
+      c.fillStyle = '#597068'; c.font = '600 22px Manrope, Arial'; c.fillText('RECORRIDO CONCEPTUAL', 58, 248); c.fillStyle = '#12231c'; c.font = '700 65px Manrope, Arial'; c.fillText('Un país,', 58, 347); c.fillText('muchos rumbos.', 58, 422);
+      c.fillStyle = '#dfe8e1'; this.roundRect(c, 58, 500, 784, 1090, 54); c.fill(); c.strokeStyle = '#86a499'; c.lineWidth = 3;
+      for (let n = -450; n < 1100; n += 125) { c.beginPath(); c.moveTo(58, 680 + n); c.lineTo(842, 1130 + n); c.stroke(); c.beginPath(); c.moveTo(58, 1380 - n); c.lineTo(842, 850 - n); c.stroke(); }
+      [[220,790],[620,680],[460,1070],[695,1330]].forEach(([x,y],i)=>{c.beginPath();c.fillStyle=i===2?'#f0b66d':'#174f43';c.arc(x,y,22,0,Math.PI*2);c.fill();c.lineWidth=9;c.strokeStyle='#fff';c.stroke()}); this.photo(c, this.destinationImages[2], 92, 1370, 390, 165, 25, '#38596b'); this.bottomNav(c, 1);
     } else {
-      this.paintLandscape(c, 0, 170, 900, 980); c.fillStyle = '#10221b'; c.font = '500 25px Arial'; c.fillText('EXPERIENCIA CONCEPTUAL', 58, 1260); c.font = '700 61px Arial'; c.fillText('Costa atlántica', 58, 1360); c.font = '400 27px Arial'; c.fillStyle = '#49665d'; c.fillText('Naturaleza · rutas · experiencias', 58, 1435);
+      this.photo(c, this.destinationImages[0], 0, 185, 900, 950, 0, '#789c83'); const g = c.createLinearGradient(0, 650, 0, 1140); g.addColorStop(0, '#06110b00'); g.addColorStop(1, '#06110bd9'); c.fillStyle = g; c.fillRect(0, 185, 900, 950);
+      c.fillStyle = '#fff'; c.font = '600 21px Manrope, Arial'; c.fillText('COSTA / URUGUAY', 58, 1010); c.font = '700 60px Manrope, Arial'; c.fillText('Horizonte abierto', 58, 1082);
+      c.fillStyle = '#12231c'; c.font = '700 48px Manrope, Arial'; c.fillText('Una ruta para', 58, 1245); c.fillText('respirar distinto.', 58, 1305); c.fillStyle = '#66746e'; c.font = '500 24px Manrope, Arial'; c.fillText('Paisajes, recorridos y experiencias', 58, 1380); c.fillText('en una dirección visual conceptual.', 58, 1420);
+      c.fillStyle = '#173f35'; this.roundRect(c, 58, 1510, 784, 112, 56); c.fill(); c.fillStyle = '#fff'; c.font = '700 22px Manrope, Arial'; c.fillText('EXPLORAR RECORRIDO', 98, 1580); c.font = '500 31px Arial'; c.fillText('→', 765, 1582); this.bottomNav(c, 1);
     }
     this.screenTexture.needsUpdate = true;
   }
-  roundRect(c, x, y, w, h, r) { c.beginPath(); c.roundRect(x, y, w, h, r); }
-  paintLandscape(c, x, y, w, h, variant = 0) { const sky = c.createLinearGradient(0, y, 0, y + h); sky.addColorStop(0, variant === 1 ? '#b6c9c4' : '#dfd08e'); sky.addColorStop(.42, '#789c83'); sky.addColorStop(.43, '#285d62'); sky.addColorStop(1, '#173f46'); c.fillStyle = sky; this.roundRect(c, x, y, w, h, 48); c.fill(); }
   resize() { const w = this.canvas.clientWidth || innerWidth, h = this.canvas.clientHeight || innerHeight; this.renderer.setSize(w, h, false); this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); this.render(); }
   setProgress(progress) {
-    this.progress = Math.max(0, Math.min(1, progress));
-    const p = this.progress, mobile = innerWidth <= 820;
-    const mix = (a, b, t) => a + (b - a) * Math.max(0, Math.min(1, t));
-    const segment = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
-    if (p < .12) { const t = segment(0, .12); this.phone.position.set(mobile ? 1.8 : 3.5, mix(-5.5, -.5, t), mix(-3, 0, t)); this.phone.rotation.set(mix(-.9, -.35, t), mix(-1.15, -.55, t), mix(.5, .18, t)); this.phone.scale.setScalar(mix(.45, .78, t)); }
-    else if (p < .45) { const t = segment(.12, .45); this.phone.position.set(mix(mobile ? .75 : 2.6, mobile ? 0 : 1.7, t), mix(-.15, 0, t), 0); this.phone.rotation.set(mix(-.34, -.04, t), mix(-.55, -.08, t), mix(.18, 0, t)); this.phone.scale.setScalar(mix(.78, 1.03, t)); }
-    else if (p < .62) { const t = segment(.45, .62); this.phone.position.set(mix(mobile ? 0 : 1.7, 0, t), 0, mix(0, 1.45, t)); this.phone.rotation.set(mix(-.04, .06, t), mix(-.08, .13, t), 0); this.phone.scale.setScalar(mix(1.03, 1.34, t)); }
-    else { const t = segment(.62, .82); this.phone.position.set(0, 0, mix(1.45, 5.2, t)); this.phone.rotation.set(mix(.06, 0, t), mix(.13, 0, t), 0); this.phone.scale.setScalar(mix(1.34, 2.65, t)); }
-    this.drawScreen(p < .28 ? 0 : p < .38 ? 1 : p < .5 ? 2 : 3);
-    this.camera.position.z = mix(13.5, 11.2, segment(.28, .62));
-    this.render();
+    this.progress = Math.max(0, Math.min(1, progress)); const p = this.progress, mobile = innerWidth <= 820;
+    const mix = (a, b, t) => a + (b - a) * Math.max(0, Math.min(1, t)); const segment = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+    if (p < .14) { const t = segment(0, .14); this.phone.position.set(mobile ? mix(.6, .15, t) : mix(3.25, 2.3, t), mix(-3.4, -.1, t), mix(-2.2, 0, t)); this.phone.rotation.set(mix(-.55, -.12, t), mix(-.72, -.34, t), mix(.18, .055, t)); this.phone.scale.setScalar(mix(.58, mobile ? .76 : .82, t)); }
+    else if (p < .45) { const t = segment(.14, .45); this.phone.position.set(mix(mobile ? .15 : 2.3, mobile ? 0 : 1.75, t), mix(-.1, .02, t), 0); this.phone.rotation.set(mix(-.12, -.025, t), mix(-.34, -.16, t), mix(.055, -.015, t)); this.phone.scale.setScalar(mix(mobile ? .76 : .82, mobile ? .84 : .96, t)); }
+    else if (p < .64) { const t = segment(.45, .64); this.phone.position.set(mix(mobile ? 0 : 1.75, mobile ? 0 : 1.25, t), mix(.02, 0, t), mix(0, .55, t)); this.phone.rotation.set(mix(-.025, 0, t), mix(-.16, -.035, t), mix(-.015, 0, t)); this.phone.scale.setScalar(mix(mobile ? .84 : .96, mobile ? .91 : 1.08, t)); }
+    else { const t = segment(.64, .82); this.phone.position.set(mobile ? 0 : mix(1.25, .55, t), 0, mix(.55, 1.6, t)); this.phone.rotation.set(0, mix(-.035, 0, t), 0); this.phone.scale.setScalar(mix(mobile ? .91 : 1.08, mobile ? 1.04 : 1.28, t)); }
+    this.drawScreen(p < .27 ? 0 : p < .4 ? 1 : p < .52 ? 2 : 3); this.camera.position.z = mix(14.6, 13.3, segment(.28, .7)); this.render();
   }
   render() { this.renderer.render(this.scene, this.camera); }
-  dispose() { this.scene.traverse(node => { node.geometry?.dispose(); if (node.material) { node.material.map?.dispose(); node.material.dispose(); } }); this.renderer.dispose(); }
+  dispose() { this.scene.traverse(node => { node.geometry?.dispose(); if (node.material) { node.material.map?.dispose(); node.material.dispose(); } }); this.screenTexture?.dispose(); this.renderer.dispose(); }
 }
 
 let rumboScene;
