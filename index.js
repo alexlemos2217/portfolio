@@ -277,11 +277,12 @@ class RumboDeviceScene {
   setProgress(progress) {
     this.progress = Math.max(0, Math.min(1, progress)); const p = this.progress, mobile = innerWidth <= 820;
     const mix = (a, b, t) => a + (b - a) * Math.max(0, Math.min(1, t)); const segment = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
-    if (p < .14) { const t = segment(0, .14); this.phone.position.set(mobile ? mix(.6, .15, t) : mix(3.25, 2.3, t), mix(-3.4, -.1, t), mix(-2.2, 0, t)); this.phone.rotation.set(mix(-.55, -.12, t), mix(-.72, -.34, t), mix(.18, .055, t)); this.phone.scale.setScalar(mix(.58, mobile ? .76 : .82, t)); }
-    else if (p < .45) { const t = segment(.14, .45); this.phone.position.set(mix(mobile ? .15 : 2.3, mobile ? 0 : 1.75, t), mix(-.1, .02, t), 0); this.phone.rotation.set(mix(-.12, -.025, t), mix(-.34, -.16, t), mix(.055, -.015, t)); this.phone.scale.setScalar(mix(mobile ? .76 : .82, mobile ? .84 : .96, t)); }
-    else if (p < .64) { const t = segment(.45, .64); this.phone.position.set(mix(mobile ? 0 : 1.75, mobile ? 0 : 1.25, t), mix(.02, 0, t), mix(0, .55, t)); this.phone.rotation.set(mix(-.025, 0, t), mix(-.16, -.035, t), mix(-.015, 0, t)); this.phone.scale.setScalar(mix(mobile ? .84 : .96, mobile ? .91 : 1.08, t)); }
-    else { const t = segment(.64, .82); this.phone.position.set(mobile ? 0 : mix(1.25, .55, t), 0, mix(.55, 1.6, t)); this.phone.rotation.set(0, mix(-.035, 0, t), 0); this.phone.scale.setScalar(mix(mobile ? .91 : 1.08, mobile ? 1.04 : 1.28, t)); }
-    this.drawScreen(p < .27 ? 0 : p < .4 ? 1 : p < .52 ? 2 : 3); this.camera.position.z = mix(14.6, 13.3, segment(.28, .7)); this.render();
+    if (p < .2) { const t = segment(0, .2); this.phone.position.set(mobile ? mix(.48, .12, t) : mix(3.05, 2.15, t), mix(-2.65, .08, t), mix(-1.6, 0, t)); this.phone.rotation.set(mix(-.45, -.1, t), mix(-.62, -.32, t), mix(.14, .04, t)); this.phone.scale.setScalar(mix(.62, mobile ? .76 : .82, t)); }
+    else if (p < .4) { const t = segment(.2, .4); this.phone.position.set(mix(mobile ? .12 : 2.15, mobile ? .02 : 1.75, t), mix(.08, .1, t), mix(0, .12, t)); this.phone.rotation.set(mix(-.1, -.035, t), mix(-.32, -.17, t), mix(.04, -.012, t)); this.phone.scale.setScalar(mix(mobile ? .76 : .82, mobile ? .84 : .94, t)); }
+    else if (p < .6) { const t = segment(.4, .6); this.phone.position.set(mix(mobile ? .02 : 1.75, mobile ? -.02 : 1.3, t), mix(.1, .06, t), mix(.12, .48, t)); this.phone.rotation.set(mix(-.035, -.012, t), mix(-.17, -.065, t), mix(-.012, .008, t)); this.phone.scale.setScalar(mix(mobile ? .84 : .94, mobile ? .91 : 1.04, t)); }
+    else if (p < .8) { const t = segment(.6, .8); this.phone.position.set(mix(mobile ? -.02 : 1.3, mobile ? .02 : .88, t), mix(.06, 0, t), mix(.48, 1.03, t)); this.phone.rotation.set(mix(-.012, 0, t), mix(-.065, -.012, t), mix(.008, 0, t)); this.phone.scale.setScalar(mix(mobile ? .91 : 1.04, mobile ? 1 : 1.16, t)); }
+    else { const t = segment(.8, 1); this.phone.position.set(mobile ? mix(.02, 0, t) : mix(.88, .42, t), mix(0, -.04, t), mix(1.03, 1.88, t)); this.phone.rotation.set(0, mix(-.012, .018, t), 0); this.phone.scale.setScalar(mix(mobile ? 1 : 1.16, mobile ? 1.13 : 1.39, t)); }
+    this.drawScreen(p < .24 ? 0 : p < .43 ? 1 : p < .63 ? 2 : 3); this.camera.position.z = mix(14.6, 12.95, p); this.render();
   }
   render() { this.renderer.render(this.scene, this.camera); }
   dispose() { this.scene.traverse(node => { node.geometry?.dispose(); if (node.material) { node.material.map?.dispose(); node.material.dispose(); } }); this.screenTexture?.dispose(); this.environment?.dispose(); this.renderer.dispose(); }
@@ -350,7 +351,7 @@ function initMotion() {
       ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 2.05 : 2.35), .22),
       onUpdate: self => {
         if (map && self.progress > .25) map.jumpTo({ center: [-56.1645, -34.9011], zoom: camera.zoom, bearing: camera.bearing, pitch: camera.pitch });
-        rumboScene?.setProgress(Math.max(0, Math.min(1, (self.progress - .47) / .36)));
+        rumboScene?.setProgress(Math.max(0, Math.min(1, (self.progress - .47) / .39)));
       }
     }
   });
