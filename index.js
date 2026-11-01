@@ -26,6 +26,12 @@ const projectData = {
     es: 'Sistema institucional privado para registrar, consultar, organizar y analizar información. La interfaz pública es una recreación conceptual: utiliza datos sintéticos y no expone capturas, personas ni información operativa.',
     en: 'A private institutional system for capturing, searching, organizing and analyzing information. The public interface is a conceptual recreation: it uses synthetic data and exposes no screenshots, people or operational information.'
   },
+  daw: {
+    title: 'DAW',
+    tech: { es: 'Sistema de información · Proyecto privado · Tecnologías no publicadas', en: 'Information system · Private project · Technologies not disclosed' },
+    es: 'Aplicación institucional privada orientada a la gestión, consulta y organización de información. La presentación muestra una interfaz conceptual con datos ficticios: no reproduce pantallas, módulos, documentos ni información institucional real.',
+    en: 'A private institutional application focused on managing, searching and organizing information. This presentation uses a conceptual interface with synthetic data: it reproduces no real screens, modules, documents or institutional information.'
+  },
   secretaria: {
     title: { es: 'Secretaría', en: 'Secretariat' },
     tech: 'PHP · MySQL · JavaScript · HTML · CSS',
@@ -45,6 +51,7 @@ function setLanguage(value) {
   root.dataset.lang = language;
   root.lang = language === 'en' ? 'en' : 'es-UY';
   document.querySelectorAll('[data-es][data-en]').forEach(node => { node.textContent = node.dataset[language]; });
+  document.querySelectorAll('[data-aria-es][data-aria-en]').forEach(node => { node.setAttribute('aria-label', node.dataset[`aria${language === 'es' ? 'Es' : 'En'}`]); });
   langButton.innerHTML = language === 'es' ? '<b>ES</b><span>EN</span>' : '<span>ES</span><b>EN</b>';
   langButton.setAttribute('aria-label', language === 'es' ? 'Switch to English' : 'Cambiar a español');
   document.querySelector('meta[name="description"]').content = language === 'es'
@@ -80,7 +87,7 @@ document.querySelectorAll('[data-detail]').forEach(button => button.addEventList
   const language = root.dataset.lang;
   dialog.querySelector('h2').textContent = typeof data.title === 'string' ? data.title : data.title[language];
   dialog.querySelector('.dialog-copy').textContent = data[language];
-  dialog.querySelector('small').textContent = data.tech;
+  dialog.querySelector('small').textContent = typeof data.tech === 'string' ? data.tech : data.tech[language];
   dialog.showModal();
 }));
 dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
@@ -381,6 +388,20 @@ function initMotion() {
     .to('.reg-interface', { scale: 1.32, xPercent: -18, yPercent: -4, duration: .22 }, 'feature')
     .addLabel('exit', .86)
     .to('.reg-interface', { opacity: 0, xPercent: -80, duration: .14 }, 'exit');
+
+  const daw = gsap.timeline({ scrollTrigger: chapterConfig('.daw', 'chapter-daw', () => vh() * (mobile ? 1.9 : 2.2)) });
+  daw.addLabel('signal', 0)
+    .fromTo('.daw .product-copy', { opacity: 0, x: mobile ? -35 : -90 }, { opacity: 1, x: 0, duration: .16 }, 'signal')
+    .fromTo('.daw-interface', { opacity: 0, yPercent: 42, scale: .58, rotationX: 28, rotationZ: -3, transformPerspective: 1500, transformOrigin: '50% 100%' }, { opacity: 1, yPercent: 0, scale: 1, rotationX: 5, rotationZ: 0, duration: .27 }, 'signal')
+    .addLabel('assemble', .3)
+    .to('.daw-interface', { rotationX: 0, xPercent: mobile ? -4 : -7, duration: .2 }, 'assemble')
+    .from('.daw-toolbar,.daw-primary,.daw-metric,.daw-list', { opacity: 0, y: 55, stagger: .045, duration: .16 }, 'assemble+=.03')
+    .from('.daw-primary i,.daw-list i', { scaleX: 0, transformOrigin: 'left center', stagger: .025, duration: .14 }, 'assemble+=.09')
+    .addLabel('inspect', .62)
+    .to('.daw .product-copy', { opacity: 0, x: -55, duration: .13 }, 'inspect')
+    .to('.daw-interface', { scale: 1.24, xPercent: mobile ? -18 : -22, yPercent: -3, duration: .22 }, 'inspect')
+    .addLabel('handoff', .87)
+    .to('.daw-interface', { opacity: 0, yPercent: -48, xPercent: 14, rotationZ: 2, duration: .13 }, 'handoff');
 
   const ops = gsap.timeline({ scrollTrigger: chapterConfig('.secretaria', 'chapter-secretaria', () => vh() * (mobile ? 1.75 : 2.05)) });
   ops.addLabel('surface', 0)
