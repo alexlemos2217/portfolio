@@ -4,6 +4,32 @@ Validated locally on 2026-11-01. Production was not changed.
 
 Emergency recovery validation: captured 35 checkpoints (0/25/50/75/100 for all seven cinematic chapters) in full motion, then repeated transform/progress assertions in reduced motion. Both modes registered 11 valid ScrollTriggers; reduced motion retained the 3D Rumbo device with immediate scrub and 28% shorter pin ranges.
 
+## V4 surgical correction
+
+The final pacing pass was measured at 1440x900 before and after the change. Values are pinned distances in viewport heights; the scrub column shows the new full-motion smoothing value.
+
+| Chapter | Before | After | Scrub |
+| --- | ---: | ---: | ---: |
+| Intro | 1.35 | 1.15 | 0.18 |
+| Portrait | 1.45 | 1.20 | 0.20 |
+| Montevideo / Rumbo | 2.35 | 1.90 | 0.16 |
+| REGCRIM | 1.40 | 1.15 | 0.18 |
+| DAW | 1.50 | 1.25 | 0.20 |
+| Secretaría | 1.40 | 1.15 | 0.18 |
+| NEXUS | 1.40 | 1.15 | 0.18 |
+| **Total** | **10.85** | **8.95** | — |
+
+The cinematic pin distance fell 17.5%. The complete document fell from 19,874px to 18,164px (8.6%) because its non-pinned content was intentionally left unchanged. Reduced motion still initializes all 11 triggers and the WebGL device; its measured chapter distances are 0.83, 0.86, 1.37, 0.83, 0.90, 0.83, and 0.83 viewport heights.
+
+- Replaced the translated Rumbo heading's HTML-like dataset value with two semantic translated spans. ES and EN both render two block lines; neither visible document text contains `<br>`.
+- Exercised the 3D device at 0%, 20%, 40%, 60%, 80%, and 100%. Every checkpoint changes geometry/camera state and the screen stages progress 0, 0, 1, 2, 3, 3; the last 20% continues approaching instead of clamping early.
+- At 20% on 1440x900, the device projects inside the viewport (`749..1303 x 128..870`). Later crops are progressive and intentional for immersion.
+- Reversed the place scene through 100% -> 60% -> 20%; device progress/state reconstructed as 1.00/screen 3 -> 0.33/screen 1 -> 0.00/screen 0.
+- A real 420px wheel gesture over the map advanced the document 364px while `#map` remained `pointer-events: none`.
+- A fast jump into REGCRIM left the place stage and WebGL canvas 1,107px above the viewport with canvas opacity 0.
+- `#projects` resolves at the 70px header offset and `#portrait` at the measured chapter start.
+- Mobile 390x844 registers 11 triggers, uses 0.95–1.70 viewport chapter ranges, and has no horizontal overflow.
+
 ## Deterministic chapter review
 
 - Captured intro, portrait, place/Rumbo, REGCRIM, Secretaría, and Nexus at 0%, 25%, 50%, 75%, and 100% scroll progress.
