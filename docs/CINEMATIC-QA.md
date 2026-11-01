@@ -23,6 +23,10 @@ Portrait hero reviewed at 1920x1080, 1440x900, 768x1024, 390x844, and 360x800. T
 - Browsers that report reduced motion still initialize the cinematic chapters; this avoids silently disabling the portfolio in embedded and privacy-focused browsers that force that preference.
 - Missing portrait image preserves layout dimensions and alternative text.
 - Failed map tiles activate the designed map fallback while the chapter timelines remain active.
+- The Rumbo WebGL canvas initializes at the device pixel ratio cap, renders on scroll updates, and does not run a permanent animation loop.
+- Rumbo was exercised at 0%, 12%, 28%, 45%, 62%, 78%, 92%, and 100%, then reversed through 62%, 28%, and 0% before a direct fast jump to 100%.
+- The interactive Rumbo demo exposes home, map, places, and detail views in a modal product surface; closing it restores the page.
+- The final CTA explicitly accepts pointer input above MapLibre on desktop and mobile.
 
 ## Static checks
 

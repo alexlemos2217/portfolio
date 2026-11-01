@@ -86,6 +86,16 @@ document.querySelectorAll('[data-detail]').forEach(button => button.addEventList
 dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 
+const rumboDemo = document.querySelector('.rumbo-demo');
+document.querySelector('.rumbo-explore')?.addEventListener('click', () => rumboDemo.showModal());
+rumboDemo?.querySelector('.rumbo-demo-close').addEventListener('click', () => rumboDemo.close());
+rumboDemo?.addEventListener('click', event => { if (event.target === rumboDemo) rumboDemo.close(); });
+rumboDemo?.querySelectorAll('[data-demo-view]').forEach(button => button.addEventListener('click', () => {
+  rumboDemo.querySelectorAll('[data-demo-view],.demo-views section').forEach(node => node.classList.remove('active'));
+  button.classList.add('active');
+  rumboDemo.querySelector(`[data-view="${button.dataset.demoView}"]`)?.classList.add('active');
+}));
+
 let map;
 function createMap() {
   if (!window.maplibregl || map) return;
@@ -125,6 +135,7 @@ function resizeCanvas() {
   context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   renderEarthFrame(currentEarthFrame);
   map?.resize();
+  rumboScene?.resize();
 }
 
 // Procedurally pre-directed frame sequence: every integer frame is a deterministic visual state.
@@ -171,6 +182,92 @@ function renderEarthFrame(frame) {
   context.restore();
 }
 
+class RumboDeviceScene {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.progress = 0;
+    this.lastScreen = -1;
+    this.active = false;
+    if (!canvas || !window.THREE) throw new Error('WebGL unavailable');
+    const T = window.THREE;
+    this.renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, innerWidth < 820 ? 1.35 : 1.8));
+    this.renderer.outputColorSpace = T.SRGBColorSpace;
+    this.renderer.toneMapping = T.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.15;
+    this.scene = new T.Scene();
+    this.camera = new T.PerspectiveCamera(32, 1, .1, 100);
+    this.camera.position.set(0, 0, 13.5);
+    this.phone = new T.Group();
+    this.scene.add(this.phone);
+    const shape = new T.Shape();
+    const w = 3.08, h = 6.28, r = .34;
+    shape.moveTo(-w / 2 + r, -h / 2); shape.lineTo(w / 2 - r, -h / 2); shape.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r); shape.lineTo(w / 2, h / 2 - r); shape.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2); shape.lineTo(-w / 2 + r, h / 2); shape.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r); shape.lineTo(-w / 2, -h / 2 + r); shape.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+    const bodyGeometry = new T.ExtrudeGeometry(shape, { depth: .34, bevelEnabled: true, bevelSegments: 6, steps: 1, bevelSize: .08, bevelThickness: .07, curveSegments: 18 });
+    bodyGeometry.center();
+    const bodyMaterial = new T.MeshPhysicalMaterial({ color: 0x161a1d, metalness: .92, roughness: .24, clearcoat: 1, clearcoatRoughness: .18 });
+    this.phone.add(new T.Mesh(bodyGeometry, bodyMaterial));
+    const glass = new T.Mesh(new T.PlaneGeometry(2.82, 5.95, 1, 1), new T.MeshPhysicalMaterial({ color: 0xffffff, roughness: .08, transmission: .05, clearcoat: 1 }));
+    glass.position.z = .255; this.phone.add(glass);
+    this.screenCanvas = document.createElement('canvas'); this.screenCanvas.width = 900; this.screenCanvas.height = 1800;
+    this.screenContext = this.screenCanvas.getContext('2d');
+    this.screenTexture = new T.CanvasTexture(this.screenCanvas); this.screenTexture.colorSpace = T.SRGBColorSpace; this.screenTexture.anisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy());
+    const screen = new T.Mesh(new T.PlaneGeometry(2.7, 5.82), new T.MeshBasicMaterial({ map: this.screenTexture, toneMapped: false }));
+    screen.position.z = .272; this.phone.add(screen);
+    const speaker = new T.Mesh(new T.CapsuleGeometry(.07, .52, 4, 12), new T.MeshStandardMaterial({ color: 0x050606, metalness: .7, roughness: .35 }));
+    speaker.rotation.z = Math.PI / 2; speaker.position.set(0, 2.72, .31); this.phone.add(speaker);
+    const side = new T.MeshStandardMaterial({ color: 0x30363a, metalness: 1, roughness: .22 });
+    [[-1.65, 1.3, .42], [-1.65, .48, .66], [1.65, .9, .78]].forEach(([x, y, sy]) => { const button = new T.Mesh(new T.BoxGeometry(.08, sy, .14), side); button.position.set(x, y, .02); this.phone.add(button); });
+    const key = new T.DirectionalLight(0xddeaff, 4.4); key.position.set(-4, 5, 8); this.scene.add(key);
+    const rim = new T.DirectionalLight(0x78a8ff, 3.2); rim.position.set(5, -1, 3); this.scene.add(rim);
+    this.scene.add(new T.HemisphereLight(0xe9f5ff, 0x061018, 1.7));
+    this.drawScreen(0); this.resize(); this.setProgress(0);
+  }
+  drawScreen(stage) {
+    if (stage === this.lastScreen) return;
+    this.lastScreen = stage;
+    const c = this.screenContext, w = this.screenCanvas.width, h = this.screenCanvas.height;
+    c.clearRect(0, 0, w, h); c.fillStyle = '#e7eee8'; c.fillRect(0, 0, w, h);
+    c.fillStyle = '#10221b'; c.font = '700 44px Arial'; c.fillText('RUMBO', 58, 92); c.font = '500 24px Arial'; c.fillText('UY', 790, 90);
+    if (stage === 0) {
+      c.fillStyle = '#3f6f62'; c.font = '500 25px Arial'; c.fillText('DESCUBRÍ URUGUAY', 58, 235); c.fillStyle = '#10221b'; c.font = '700 72px Arial'; c.fillText('¿Hacia dónde', 58, 345); c.fillText('vamos?', 58, 425);
+      c.strokeStyle = '#9bb1a8'; c.lineWidth = 3; this.roundRect(c, 58, 510, 784, 110, 55); c.stroke(); c.font = '400 27px Arial'; c.fillText('Buscar destinos', 95, 580);
+      this.paintLandscape(c, 58, 720, 784, 860); c.fillStyle = 'white'; c.font = '700 62px Arial'; c.fillText('COSTA', 105, 1460); c.font = '400 25px Arial'; c.fillText('Rutas  ·  Naturaleza  ·  Mar', 105, 1510);
+    } else if (stage === 1) {
+      c.fillStyle = '#315f52'; c.font = '500 25px Arial'; c.fillText('EXPLORAR', 58, 220); c.fillStyle = '#10221b'; c.font = '700 66px Arial'; c.fillText('Destinos', 58, 330);
+      ['COSTA', 'SIERRAS', 'CIUDADES'].forEach((label, index) => { const y = 430 + index * 410; this.paintLandscape(c, 58, y, 784, 340, index); c.fillStyle = 'white'; c.font = '700 38px Arial'; c.fillText(label, 90, y + 285); });
+    } else if (stage === 2) {
+      c.fillStyle = '#315f52'; c.font = '500 25px Arial'; c.fillText('MAPA CONCEPTUAL', 58, 220); c.fillStyle = '#d7e4dd'; c.fillRect(58, 300, 784, 1280); c.strokeStyle = '#6f9a8e'; c.lineWidth = 3;
+      for (let n = -600; n < 1200; n += 115) { c.beginPath(); c.moveTo(58, 500 + n); c.lineTo(842, 1050 + n); c.stroke(); c.beginPath(); c.moveTo(58, 1200 - n); c.lineTo(842, 650 - n); c.stroke(); }
+      [[230,620],[610,510],[450,980],[700,1240]].forEach(([x,y])=>{c.beginPath();c.fillStyle='#174f43';c.arc(x,y,22,0,Math.PI*2);c.fill();c.lineWidth=8;c.strokeStyle='white';c.stroke()});
+    } else {
+      this.paintLandscape(c, 0, 170, 900, 980); c.fillStyle = '#10221b'; c.font = '500 25px Arial'; c.fillText('EXPERIENCIA CONCEPTUAL', 58, 1260); c.font = '700 61px Arial'; c.fillText('Costa atlántica', 58, 1360); c.font = '400 27px Arial'; c.fillStyle = '#49665d'; c.fillText('Naturaleza · rutas · experiencias', 58, 1435);
+    }
+    this.screenTexture.needsUpdate = true;
+  }
+  roundRect(c, x, y, w, h, r) { c.beginPath(); c.roundRect(x, y, w, h, r); }
+  paintLandscape(c, x, y, w, h, variant = 0) { const sky = c.createLinearGradient(0, y, 0, y + h); sky.addColorStop(0, variant === 1 ? '#b6c9c4' : '#dfd08e'); sky.addColorStop(.42, '#789c83'); sky.addColorStop(.43, '#285d62'); sky.addColorStop(1, '#173f46'); c.fillStyle = sky; this.roundRect(c, x, y, w, h, 48); c.fill(); }
+  resize() { const w = this.canvas.clientWidth || innerWidth, h = this.canvas.clientHeight || innerHeight; this.renderer.setSize(w, h, false); this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); this.render(); }
+  setProgress(progress) {
+    this.progress = Math.max(0, Math.min(1, progress));
+    const p = this.progress, mobile = innerWidth <= 820;
+    const mix = (a, b, t) => a + (b - a) * Math.max(0, Math.min(1, t));
+    const segment = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+    if (p < .12) { const t = segment(0, .12); this.phone.position.set(mobile ? 1.8 : 3.5, mix(-5.5, -.5, t), mix(-3, 0, t)); this.phone.rotation.set(mix(-.9, -.35, t), mix(-1.15, -.55, t), mix(.5, .18, t)); this.phone.scale.setScalar(mix(.45, .78, t)); }
+    else if (p < .45) { const t = segment(.12, .45); this.phone.position.set(mix(mobile ? .75 : 2.6, mobile ? 0 : 1.7, t), mix(-.15, 0, t), 0); this.phone.rotation.set(mix(-.34, -.04, t), mix(-.55, -.08, t), mix(.18, 0, t)); this.phone.scale.setScalar(mix(.78, 1.03, t)); }
+    else if (p < .62) { const t = segment(.45, .62); this.phone.position.set(mix(mobile ? 0 : 1.7, 0, t), 0, mix(0, 1.45, t)); this.phone.rotation.set(mix(-.04, .06, t), mix(-.08, .13, t), 0); this.phone.scale.setScalar(mix(1.03, 1.34, t)); }
+    else { const t = segment(.62, .82); this.phone.position.set(0, 0, mix(1.45, 5.2, t)); this.phone.rotation.set(mix(.06, 0, t), mix(.13, 0, t), 0); this.phone.scale.setScalar(mix(1.34, 2.65, t)); }
+    this.drawScreen(p < .28 ? 0 : p < .38 ? 1 : p < .5 ? 2 : 3);
+    this.camera.position.z = mix(13.5, 11.2, segment(.28, .62));
+    this.render();
+  }
+  render() { this.renderer.render(this.scene, this.camera); }
+  dispose() { this.scene.traverse(node => { node.geometry?.dispose(); if (node.material) { node.material.map?.dispose(); node.material.dispose(); } }); this.renderer.dispose(); }
+}
+
+let rumboScene;
+function createRumboScene() { try { rumboScene = new RumboDeviceScene(document.querySelector('#rumbo-webgl')); } catch { body.classList.add('rumbo-webgl-failed'); } }
+
 function chapterConfig(trigger, id, distance, scrub = .8) {
   return { trigger, id, pin: true, pinSpacing: true, start: 'top top', end: typeof distance === 'function' ? () => `+=${distance()}` : `+=${distance}`, scrub, anticipatePin: 1, invalidateOnRefresh: true };
 }
@@ -187,7 +284,7 @@ function initMotion() {
 
   gsap.to('.progress i', { scaleY: 1, scrollTrigger: { id: 'page-progress', trigger: body, start: 'top top', end: 'bottom bottom', scrub: .2 } });
 
-  const intro = gsap.timeline({ scrollTrigger: chapterConfig('.intro', 'chapter-intro', () => vh() * (mobile ? 2.4 : 3.1)) });
+  const intro = gsap.timeline({ scrollTrigger: chapterConfig('.intro', 'chapter-intro', () => vh() * (mobile ? 1.8 : 2.15)) });
   intro.addLabel('reveal', 0)
     .from('.intro h1 .line i', { yPercent: 105, stagger: .08, duration: .22 }, 'reveal')
     .from('.intro-meta,.intro-copy>.overline', { opacity: 0, y: 30, duration: .18 }, 'reveal+=.06')
@@ -201,7 +298,7 @@ function initMotion() {
     .to('.intro-canvas', { backgroundColor: '#08090b', duration: .28 }, 'handoff')
     .to('.orb', { xPercent: 32, scale: .55, opacity: 0, duration: .28 }, 'handoff');
 
-  const portrait = gsap.timeline({ scrollTrigger: chapterConfig('.portrait-scene', 'chapter-portrait', () => vh() * (mobile ? 2.8 : 3.4)) });
+  const portrait = gsap.timeline({ scrollTrigger: chapterConfig('.portrait-scene', 'chapter-portrait', () => vh() * (mobile ? 2.05 : 2.35)) });
   portrait.addLabel('concealed', 0)
     .set('.portrait-frame', { autoAlpha: 1 })
     .fromTo('.portrait-intro h2', { yPercent: 50, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .16 }, 'concealed')
@@ -225,9 +322,10 @@ function initMotion() {
   const camera = { zoom: 10.4, bearing: -8, pitch: 28 };
   const place = gsap.timeline({
     scrollTrigger: {
-      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 4.4 : 5.2), .65),
+      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 3.35 : 3.75), .48),
       onUpdate: self => {
         if (map && self.progress > .34) map.jumpTo({ center: [-56.1645, -34.9011], zoom: camera.zoom, bearing: camera.bearing, pitch: camera.pitch });
+        rumboScene?.setProgress(Math.max(0, Math.min(1, (self.progress - .42) / .58)));
       }
     }
   });
@@ -246,18 +344,32 @@ function initMotion() {
     .addLabel('montevideo', .48)
     .from('.city-copy', { opacity: 0, y: 85, duration: .15 }, 'montevideo')
     .to(camera, { zoom: 13.8, bearing: 8, pitch: 46, duration: .18 }, 'montevideo')
-    .addLabel('map-to-product', .66)
-    .to('.city-copy', { opacity: 0, y: -65, duration: .11 }, 'map-to-product')
-    .from('.rumbo-map-label', { opacity: 0, y: 38, duration: .12 }, 'map-to-product')
-    .to('#map', { scale: .78, xPercent: -18, borderRadius: '18px', duration: .18 }, 'map-to-product')
-    .from('.rumbo-device', { opacity: 0, yPercent: 26, rotationY: -15, scale: .8, duration: .16 }, 'map-to-product+=.04')
-    .addLabel('rumbo', .82)
-    .from('.rumbo-copy', { opacity: 0, y: 60, duration: .12 }, 'rumbo')
-    .to('.rumbo-map-label', { opacity: 0, y: -35, duration: .1 }, 'rumbo')
-    .to('.rumbo-device', { scale: 1.06, yPercent: -3, duration: .15 }, 'rumbo')
-    .to('#map', { opacity: .2, filter: 'blur(4px)', duration: .15 }, 'rumbo');
+    .addLabel('arrival', .42)
+    .to('.city-copy', { opacity: 0, y: -65, duration: .08 }, 'arrival')
+    .fromTo('.rumbo-map-label', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .07 }, 'arrival')
+    .to('#map', { scale: 1.16, filter: 'saturate(.35) brightness(.42)', duration: .07 }, 'arrival')
+    .addLabel('device', .49)
+    .to('.rumbo-map-label', { opacity: 0, y: -30, duration: .06 }, 'device')
+    .to('#map', { opacity: .18, scale: 1.28, duration: .09 }, 'device')
+    .fromTo('.rumbo-product-title', { opacity: 0, x: -45 }, { opacity: 1, x: 0, duration: .09 }, 'device')
+    .addLabel('experience', .58)
+    .to('.rumbo-product-title', { opacity: .2, x: mobile ? -18 : -75, duration: .1 }, 'experience')
+    .fromTo('.rumbo-chapter', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: .1 }, 'experience')
+    .addLabel('into-product', .68)
+    .to('.rumbo-product-title,.rumbo-chapter', { opacity: 0, duration: .1 }, 'into-product')
+    .to('#map,.map-shade,.map-credit', { opacity: 0, duration: .1 }, 'into-product')
+    .addLabel('beyond-screen', .78)
+    .to('#rumbo-webgl', { opacity: .28, duration: .09 }, 'beyond-screen')
+    .to('.rumbo-world', { clipPath: 'circle(75% at 50% 50%)', scale: 1, duration: .09 }, 'beyond-screen')
+    .addLabel('discover-uruguay', .87)
+    .to('#rumbo-webgl', { opacity: 0, duration: .08 }, 'discover-uruguay')
+    .fromTo('.rumbo-editorial', { opacity: 0, y: 45 }, { opacity: 1, y: 0, duration: .08 }, 'discover-uruguay')
+    .to('.rumbo-explore', { autoAlpha: 1, duration: .08 }, 'discover-uruguay')
+    .addLabel('next-chapter', .95)
+    .to('.rumbo-editorial,.rumbo-explore', { opacity: 0, y: -35, duration: .05 }, 'next-chapter')
+    .to('.rumbo-world', { filter: 'brightness(.28) saturate(.6)', scale: 1.06, duration: .05 }, 'next-chapter');
 
-  const reg = gsap.timeline({ scrollTrigger: chapterConfig('.regcrim', 'chapter-regcrim', () => vh() * (mobile ? 2.4 : 3)) });
+  const reg = gsap.timeline({ scrollTrigger: chapterConfig('.regcrim', 'chapter-regcrim', () => vh() * (mobile ? 1.75 : 2.05)) });
   reg.addLabel('distance', 0)
     .fromTo('.regcrim .product-copy', { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: .18 }, 'distance')
     .fromTo('.reg-interface', { opacity: 0, scale: .52, rotationY: -24, rotationX: 10, xPercent: 22, transformPerspective: 1400 }, { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, xPercent: 0, duration: .3 }, 'distance')
@@ -270,7 +382,7 @@ function initMotion() {
     .addLabel('exit', .86)
     .to('.reg-interface', { opacity: 0, xPercent: -80, duration: .14 }, 'exit');
 
-  const ops = gsap.timeline({ scrollTrigger: chapterConfig('.secretaria', 'chapter-secretaria', () => vh() * (mobile ? 2.4 : 3)) });
+  const ops = gsap.timeline({ scrollTrigger: chapterConfig('.secretaria', 'chapter-secretaria', () => vh() * (mobile ? 1.75 : 2.05)) });
   ops.addLabel('surface', 0)
     .fromTo('.secretaria .product-copy', { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: .18 }, 'surface')
     .fromTo('.ops-interface', { opacity: 0, scale: .65, z: -300, rotationX: 12, transformPerspective: 1300 }, { opacity: 1, scale: 1, z: 0, rotationX: 0, duration: .26 }, 'surface')
@@ -283,7 +395,7 @@ function initMotion() {
     .addLabel('exit', .87)
     .to('.ops-interface', { xPercent: -120, opacity: 0, duration: .13 }, 'exit');
 
-  const nexus = gsap.timeline({ scrollTrigger: chapterConfig('.nexus', 'chapter-nexus', () => vh() * (mobile ? 2.4 : 3)) });
+  const nexus = gsap.timeline({ scrollTrigger: chapterConfig('.nexus', 'chapter-nexus', () => vh() * (mobile ? 1.75 : 2.05)) });
   nexus.addLabel('type', 0)
     .fromTo('.nexus .product-copy', { opacity: 0, x: -70 }, { opacity: 1, x: 0, duration: .16 }, 'type')
     .fromTo('.nexus-interface', { opacity: 0, scale: .7, rotationY: 20, transformPerspective: 1300 }, { opacity: 1, scale: 1, rotationY: 0, duration: .25 }, 'type')
@@ -340,6 +452,7 @@ addEventListener('resize', () => {
 addEventListener('pagehide', () => {
   window.ScrollTrigger?.getAll().forEach(trigger => trigger.kill());
   map?.remove();
+  rumboScene?.dispose();
   map = undefined;
 }, { once: true });
 
@@ -347,6 +460,7 @@ async function boot() {
   enableCinematicMotionStyles();
   resizeCanvas();
   renderEarthFrame(0);
+  createRumboScene();
   const portrait = document.querySelector('.portrait-frame img');
   await Promise.race([
     Promise.allSettled([document.fonts?.ready, portrait?.decode?.()]),
