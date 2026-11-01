@@ -8,7 +8,17 @@ const header = document.querySelector('.nav');
 const menu = document.querySelector('#menu');
 const menuButton = document.querySelector('.menu-button');
 const langButton = document.querySelector('.lang');
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+function enableCinematicMotionStyles() {
+  for (const sheet of document.styleSheets) {
+    try {
+      for (const rule of sheet.cssRules) {
+        if (!(rule instanceof CSSMediaRule)) continue;
+        if (rule.conditionText.includes('prefers-reduced-motion: reduce')) rule.media.mediaText = 'not all';
+        if (rule.conditionText.includes('prefers-reduced-motion: no-preference')) rule.media.mediaText = 'all';
+      }
+    } catch { /* Cross-origin stylesheets are intentionally ignored. */ }
+  }
+}
 const projectData = {
   regcrim: {
     title: 'REGCRIM',
@@ -166,7 +176,7 @@ function chapterConfig(trigger, id, distance, scrub = .8) {
 }
 
 function initMotion() {
-  if (!window.gsap || !window.ScrollTrigger || reduceMotion.matches) {
+  if (!window.gsap || !window.ScrollTrigger) {
     body.classList.add('motion-static');
     return;
   }
@@ -301,7 +311,7 @@ function initMotion() {
     if (!trigger) return;
     event.preventDefault();
     closeMenu();
-    scrollTo({ top: trigger.start + 1, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    scrollTo({ top: trigger.start + 1, behavior: 'smooth' });
     history.replaceState(null, '', link.hash);
   }));
 
@@ -334,10 +344,14 @@ addEventListener('pagehide', () => {
 }, { once: true });
 
 async function boot() {
+  enableCinematicMotionStyles();
   resizeCanvas();
   renderEarthFrame(0);
   const portrait = document.querySelector('.portrait-frame img');
-  await Promise.allSettled([document.fonts?.ready, portrait?.decode?.()]);
+  await Promise.race([
+    Promise.allSettled([document.fonts?.ready, portrait?.decode?.()]),
+    new Promise(resolve => setTimeout(resolve, 1200))
+  ]);
   createMap();
   initMotion();
 }

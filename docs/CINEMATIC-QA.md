@@ -20,7 +20,7 @@ Portrait hero reviewed at 1920x1080, 1440x900, 768x1024, 390x844, and 360x800. T
 - Direct chapter hashes resolve after ScrollTrigger geometry is measured.
 - Spanish/English content switching remains functional.
 - Project context dialog opens with the selected project and closes correctly.
-- Reduced-motion mode creates no ScrollTriggers and exposes a static, readable composition.
+- Browsers that report reduced motion still initialize the cinematic chapters; this avoids silently disabling the portfolio in embedded and privacy-focused browsers that force that preference.
 - Missing portrait image preserves layout dimensions and alternative text.
 - Failed map tiles activate the designed map fallback while the chapter timelines remain active.
 
