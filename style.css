@@ -31,6 +31,6 @@
 /* Motion refinement: one visual hierarchy during the Rumbo immersion. */
 .rumbo-world{background-image:linear-gradient(90deg,#07120eb8 0,#07120e28 52%,#07120e7d 100%),url('img/rumbo-costa-premium.jpg');background-size:cover;background-position:center 58%}
 .rumbo-world>.rumbo-sun,.rumbo-world>.rumbo-hills,.rumbo-world>.rumbo-water,.rumbo-world>.rumbo-world-grid{display:none}
-.rumbo-editorial{max-width:min(720px,72vw);text-shadow:0 2px 24px #eef8ef55}.rumbo-editorial p{max-width:420px;line-height:1.55}
+.rumbo-editorial{max-width:min(720px,72vw);text-shadow:0 2px 24px #eef8ef55}.rumbo-editorial h3>span{display:block}.rumbo-editorial p{max-width:420px;line-height:1.55}
 @media(max-width:820px){.rumbo-world{background-position:58% center}.rumbo-editorial{max-width:calc(100% - 44px)}}
 .motion-static .rumbo-transition{min-height:100svh}.motion-static .rumbo-world{clip-path:none;inset:0;opacity:.48}.motion-static .rumbo-product-title{opacity:1}.motion-static .rumbo-editorial,.motion-static .rumbo-explore{display:none}
