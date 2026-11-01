@@ -1,10 +1,10 @@
 # Alexander Lemos — Portfolio
 
-Portfolio bilingüe y cinematográfico construido con HTML, CSS y JavaScript nativo. El recorrido usa escenas sticky y progreso de scroll reversible, una visualización canvas del viaje hacia Montevideo, cartografía real de OpenStreetMap y presentaciones conceptuales de proyectos privados sin datos sensibles.
+Portfolio bilingüe y cinematográfico construido con HTML, CSS y JavaScript. El recorrido usa escenas sticky y timelines reversibles con GSAP/ScrollTrigger, una visualización canvas del viaje hacia Montevideo, MapLibre con cartografía de OpenStreetMap y presentaciones conceptuales de proyectos privados sin datos sensibles.
 
 ## Desarrollo local
 
-No requiere compilación ni instalación de dependencias. Serví la raíz con cualquier servidor estático, por ejemplo:
+No requiere compilación ni instalación de dependencias. GSAP y MapLibre se cargan desde jsDelivr; la cartografía usa teselas estándar de OpenStreetMap. Serví la raíz con cualquier servidor estático, por ejemplo:
 
 ```bash
 npx serve .
@@ -16,7 +16,7 @@ Abrí la URL local informada por el servidor. Abrir `index.html` directamente ta
 
 - `index.html`: contenido, escenas, navegación y metadatos.
 - `style.css`: dirección visual, motion, responsive y modo de movimiento reducido.
-- `index.js`: progreso de scroll, idioma, navegación, diálogos y globo canvas.
+- `index.js`: timelines, idioma, navegación, diálogos, globo canvas y configuración de MapLibre.
 - `img/alex.jpg`: retrato real utilizado en la escena personal.
 
 Los textos en español e inglés viven en atributos `data-es` y `data-en`. Los datos públicos de contacto y los enlaces reales se mantienen en `index.html`.
