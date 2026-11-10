@@ -1,0 +1,11 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const workspace = path.resolve(__dirname, '..');
+process.chdir(workspace);
+const output = path.resolve(workspace, 'dist');
+if (path.dirname(output) !== workspace || path.basename(output) !== 'dist') throw new Error('Unexpected build directory');
+fs.rmSync(output, {recursive:true,force:true});
+fs.mkdirSync('dist',{recursive:true});
+for(const file of ['index.html','index.js','style.css','interactions.css','interactions.js','project-visuals.css','favicon.svg','og-image.svg','og-image.png','robots.txt','sitemap.xml']) fs.copyFileSync(file,path.join('dist',file));
+for(const directory of ['img','fonts','vendor']) fs.cpSync(directory,path.join('dist',directory),{recursive:true});
+console.log('Static portfolio prepared in dist/');

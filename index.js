@@ -1,26 +1,4 @@
 'use strict';
-
-const root = document.documentElement;
-const body = document.body;
-const initialHash = location.hash;
-const motionDebug = new URLSearchParams(location.search).has('motion-debug');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (initialHash) history.replaceState(null, '', `${location.pathname}${location.search}`);
-const header = document.querySelector('.nav');
-const menu = document.querySelector('#menu');
-const menuButton = document.querySelector('.menu-button');
-const langButton = document.querySelector('.lang');
-function enableCinematicMotionStyles() {
-  for (const sheet of document.styleSheets) {
-    try {
-      for (const rule of sheet.cssRules) {
-        if (!(rule instanceof CSSMediaRule)) continue;
-        if (rule.conditionText.includes('prefers-reduced-motion: reduce')) rule.media.mediaText = 'not all';
-        if (rule.conditionText.includes('prefers-reduced-motion: no-preference')) rule.media.mediaText = 'all';
-      }
-    } catch { /* Cross-origin stylesheets are intentionally ignored. */ }
-  }
-}
 const projectData = {
   regcrim: {
     title: 'REGCRIM',
@@ -48,349 +26,129 @@ const projectData = {
   }
 };
 
+
+const root = document.documentElement;
+const menu = document.querySelector('#menu');
+const menuButton = document.querySelector('.menu-button');
+const langButton = document.querySelector('.lang');
+const detail = document.querySelector('#detail-dialog');
+let activeProject;
+function renderProject() {
+  if (!activeProject) return;
+  const data = projectData[activeProject];
+  const lang = root.dataset.lang;
+  detail.querySelector('h2').textContent = typeof data.title === 'string' ? data.title : data.title[lang];
+  detail.querySelector('.dialog-copy').textContent = data[lang];
+  detail.querySelector('small').textContent = typeof data.tech === 'string' ? data.tech : data.tech[lang];
+}
 function setLanguage(value) {
-  const language = value === 'en' ? 'en' : 'es';
-  root.dataset.lang = language;
-  root.lang = language === 'en' ? 'en' : 'es-UY';
-  document.querySelectorAll('[data-es][data-en]').forEach(node => { node.textContent = node.dataset[language]; });
-  document.querySelectorAll('[data-aria-es][data-aria-en]').forEach(node => { node.setAttribute('aria-label', node.dataset[`aria${language === 'es' ? 'Es' : 'En'}`]); });
-  langButton.innerHTML = language === 'es' ? '<b>ES</b><span>EN</span>' : '<span>ES</span><b>EN</b>';
-  langButton.setAttribute('aria-label', language === 'es' ? 'Switch to English' : 'Cambiar a español');
-  document.querySelector('meta[name="description"]').content = language === 'es'
-    ? 'Alexander Lemos — Software Developer y Creative Technologist en Montevideo. Sistemas web, datos y experiencias digitales.'
-    : 'Alexander Lemos — Software Developer and Creative Technologist in Montevideo. Web systems, data and digital experiences.';
-  try { localStorage.setItem('portfolio-language', language); } catch { /* Progressive enhancement. */ }
+  const lang = value === 'en' ? 'en' : 'es';
+  root.dataset.lang = lang;
+  root.lang = lang === 'en' ? 'en' : 'es-UY';
+  document.querySelectorAll('[data-es][data-en]').forEach(node => { node.textContent = node.dataset[lang]; });
+  document.querySelectorAll('[data-aria-es][data-aria-en]').forEach(node => node.setAttribute('aria-label', node.dataset[lang === 'es' ? 'ariaEs' : 'ariaEn']));
+  langButton.innerHTML = lang === 'es' ? '<b>ES</b><span>EN</span>' : '<span>ES</span><b>EN</b>';
+  langButton.setAttribute('aria-label', lang === 'es' ? 'ES / EN — Switch to English' : 'ES / EN — Cambiar a español');
+  menuButton.setAttribute('aria-label', lang === 'es' ? 'Menú de navegación' : 'Navigation menu');
+  menu.setAttribute('aria-label', lang === 'es' ? 'Navegación principal' : 'Main navigation');
+  document.querySelector('.monogram').setAttribute('aria-label', lang === 'es' ? 'Alexander Lemos — inicio' : 'Alexander Lemos — home');
+  const description = lang === 'es' ? 'Alexander Lemos — Full Stack Developer en Montevideo, Uruguay. Desarrollo de aplicaciones, sistemas e interfaces.' : 'Alexander Lemos — Full Stack Developer in Montevideo, Uruguay. Applications, systems and interfaces.';
+  document.querySelector('meta[name="description"]').content = description;
+  document.querySelector('meta[property="og:description"]').content = description;
+  document.querySelector('meta[property="og:locale"]').content = lang === 'es' ? 'es_UY' : 'en_US';
+  renderProject();
+  try { localStorage.setItem('portfolio-language', lang); } catch { /* Storage is optional. */ }
 }
-
-let preferredLanguage = 'es';
-try { preferredLanguage = localStorage.getItem('portfolio-language') || 'es'; } catch { /* Spanish is the default. */ }
-setLanguage(preferredLanguage);
+let preferred = 'es';
+try { preferred = localStorage.getItem('portfolio-language') || 'es'; } catch { /* Use Spanish. */ }
+setLanguage(preferred);
 langButton.addEventListener('click', () => setLanguage(root.dataset.lang === 'es' ? 'en' : 'es'));
-
-function closeMenu() {
+function closeMenu(returnFocus = false) {
   menu.classList.remove('open');
-  body.classList.remove('menu-open');
   menuButton.setAttribute('aria-expanded', 'false');
+  if (returnFocus) menuButton.focus();
 }
-
 menuButton.addEventListener('click', () => {
   const open = menu.classList.toggle('open');
-  body.classList.toggle('menu-open', open);
   menuButton.setAttribute('aria-expanded', String(open));
 });
-menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
-addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 24), { passive: true });
-document.getElementById('year').textContent = new Date().getFullYear();
-
-const dialog = document.querySelector('#detail-dialog');
-document.querySelectorAll('[data-detail]').forEach(button => button.addEventListener('click', () => {
-  const data = projectData[button.dataset.detail];
-  const language = root.dataset.lang;
-  dialog.querySelector('h2').textContent = typeof data.title === 'string' ? data.title : data.title[language];
-  dialog.querySelector('.dialog-copy').textContent = data[language];
-  dialog.querySelector('small').textContent = typeof data.tech === 'string' ? data.tech : data.tech[language];
-  dialog.showModal();
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && menu.classList.contains('open')) closeMenu(true); });
+document.addEventListener('click', event => { if (!event.target.closest('.nav')) closeMenu(); });
+menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+  closeMenu();
+  const target = document.querySelector(link.hash);
+  target?.setAttribute('tabindex', '-1');
+  target?.focus({ preventScroll: true });
 }));
-dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
-
-const rumboCase = document.querySelector('.rumbo-case');
-document.querySelector('.rumbo-detail-open')?.addEventListener('click', () => rumboCase.showModal());
-rumboCase?.querySelector('.rumbo-case-close').addEventListener('click', () => rumboCase.close());
-rumboCase?.addEventListener('click', event => { if (event.target === rumboCase) rumboCase.close(); });
-
-let map;
-function createMap() {
-  if (!window.maplibregl || map) return;
-  map = new maplibregl.Map({
-    container: 'map',
-    center: [-56.1645, -34.9011],
-    zoom: 10.4,
-    bearing: -8,
-    pitch: 28,
-    attributionControl: false,
-    interactive: false,
-    fadeDuration: 0,
-    style: {
-      version: 8,
-      sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '© OpenStreetMap contributors' } },
-      layers: [{ id: 'osm', type: 'raster', source: 'osm', paint: { 'raster-opacity': .96, 'raster-saturation': -.45, 'raster-contrast': .18, 'raster-brightness-min': .05, 'raster-brightness-max': .72 } }]
-    }
+matchMedia('(min-width:701px)').addEventListener('change', () => closeMenu());
+document.querySelector('#year').textContent = new Date().getFullYear();
+document.querySelectorAll('[data-detail]').forEach(button => button.addEventListener('click', () => {
+  activeProject = button.dataset.detail;
+  renderProject();
+  detail.showModal();
+}));
+const rumbo = document.querySelector('.rumbo-case');
+document.querySelector('.rumbo-detail-open').addEventListener('click', () => rumbo.showModal());
+document.querySelectorAll('dialog').forEach(dialog => {
+  dialog.querySelector('button').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => {
+    const box = dialog.getBoundingClientRect();
+    if (event.target === dialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) dialog.close();
   });
-  map.on('load', () => map.resize());
-  map.on('error', () => body.classList.add('map-fallback'));
-}
+});
 
-const canvas = document.querySelector('#earth');
-const context = canvas.getContext('2d', { alpha: true });
-const EARTH_FRAME_COUNT = 120;
-let canvasWidth = 0;
-let canvasHeight = 0;
-let pixelRatio = 1;
-let currentEarthFrame = 0;
-
-function resizeCanvas() {
-  pixelRatio = Math.min(devicePixelRatio || 1, 2);
-  canvasWidth = canvas.clientWidth;
-  canvasHeight = canvas.clientHeight;
-  canvas.width = Math.round(canvasWidth * pixelRatio);
-  canvas.height = Math.round(canvasHeight * pixelRatio);
-  context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-  renderEarthFrame(currentEarthFrame);
-  map?.resize();
-}
-
-// Procedurally pre-directed frame sequence: every integer frame is a deterministic visual state.
-function renderEarthFrame(frame) {
-  currentEarthFrame = Math.max(0, Math.min(EARTH_FRAME_COUNT - 1, Math.round(frame)));
-  const progress = currentEarthFrame / (EARTH_FRAME_COUNT - 1);
-  const radius = Math.min(canvasWidth, canvasHeight) * (.22 + progress * .31);
-  const x = canvasWidth * (.66 - progress * .13);
-  const y = canvasHeight * (.52 + progress * .01);
-  const rotation = progress * 2.7;
-  context.clearRect(0, 0, canvasWidth, canvasHeight);
-  context.save();
-  context.translate(x, y);
-  const halo = context.createRadialGradient(-radius * .25, -radius * .3, 0, 0, 0, radius * 1.45);
-  halo.addColorStop(0, 'rgba(76,141,255,.34)');
-  halo.addColorStop(.52, 'rgba(13,46,83,.55)');
-  halo.addColorStop(1, 'rgba(0,0,0,0)');
-  context.fillStyle = halo;
-  context.beginPath(); context.arc(0, 0, radius * 1.45, 0, Math.PI * 2); context.fill();
-  context.beginPath(); context.arc(0, 0, radius, 0, Math.PI * 2); context.clip();
-  const ocean = context.createRadialGradient(-radius * .35, -radius * .4, 0, 0, 0, radius);
-  ocean.addColorStop(0, '#315f96'); ocean.addColorStop(.54, '#0d2b50'); ocean.addColorStop(1, '#020811');
-  context.fillStyle = ocean; context.fillRect(-radius, -radius, radius * 2, radius * 2);
-  context.strokeStyle = 'rgba(192,218,255,.12)'; context.lineWidth = 1;
-  for (let latitude = -60; latitude <= 60; latitude += 20) {
-    const ry = radius * Math.cos(latitude * Math.PI / 180);
-    const yy = radius * Math.sin(latitude * Math.PI / 180);
-    context.beginPath(); context.ellipse(0, yy, ry, ry * .1, 0, 0, Math.PI * 2); context.stroke();
-  }
-  for (let line = 0; line < 10; line += 1) {
-    context.beginPath(); context.ellipse(0, 0, radius * Math.abs(Math.cos(rotation + line * Math.PI / 5)), radius, 0, 0, Math.PI * 2); context.stroke();
-  }
-  context.fillStyle = 'rgba(142,171,178,.7)';
-  context.beginPath();
-  context.moveTo(-radius * .3, -radius * .67);
-  context.bezierCurveTo(radius * .03, -radius * .78, radius * .2, -radius * .52, radius * .06, -radius * .28);
-  context.bezierCurveTo(radius * .3, -radius * .08, radius * .12, radius * .08, radius * .17, radius * .3);
-  context.bezierCurveTo(radius * .06, radius * .62, -radius * .05, radius * .82, -radius * .16, radius * .57);
-  context.bezierCurveTo(-radius * .29, radius * .27, -radius * .45, radius * .03, -radius * .33, -radius * .2);
-  context.bezierCurveTo(-radius * .51, -radius * .35, -radius * .46, -radius * .54, -radius * .3, -radius * .67);
-  context.fill();
-  context.shadowColor = '#6aa4ff'; context.shadowBlur = 18; context.fillStyle = '#d8e9ff';
-  context.beginPath(); context.arc(-radius * .11, radius * .57, 3.5, 0, Math.PI * 2); context.fill();
-  context.restore();
-}
-
-function chapterConfig(trigger, id, distance, scrub = .18) {
-  return { trigger, id, pin: true, pinSpacing: true, start: 'top top', end: typeof distance === 'function' ? () => `+=${distance()}` : `+=${distance}`, scrub: reducedMotion ? true : scrub, markers: motionDebug, anticipatePin: 1, invalidateOnRefresh: true };
-}
-
+// Optional enhancement: content and native anchors work before GSAP loads.
+let motion;
 function initMotion() {
-  if (!window.gsap || !window.ScrollTrigger) {
-    body.classList.add('motion-static');
-    return;
-  }
-  const mobile = innerWidth <= 820;
-  const vh = () => innerHeight * (reducedMotion ? .72 : 1);
+  if (!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
-  gsap.defaults({ ease: 'none' });
-
-  gsap.to('.progress i', { scaleY: 1, scrollTrigger: { id: 'page-progress', trigger: body, start: 'top top', end: 'bottom bottom', scrub: .2 } });
-
-  const intro = gsap.timeline({ scrollTrigger: chapterConfig('.intro', 'chapter-intro', () => vh() * (mobile ? .95 : 1.15), .18) });
-  intro.addLabel('reveal', 0)
-    .from('.intro h1 .line i', { yPercent: 105, stagger: .08, duration: .22 }, 'reveal')
-    .from('.intro-meta,.intro-copy>.overline', { opacity: 0, y: 30, duration: .18 }, 'reveal+=.06')
-    .addLabel('open', .24)
-    .to('.intro h1 .line:first-child i', { xPercent: mobile ? 7 : 15, scale: 1.12, duration: .38 }, 'open')
-    .to('.intro h1 .outline i', { xPercent: mobile ? -9 : -18, scale: 1.18, duration: .38 }, 'open')
-    .to('.orb', { scale: 1.85, rotation: 45, opacity: .18, duration: .38 }, 'open')
-    .to('.scroll-note,.intro-meta,.intro-copy>.overline', { opacity: 0, y: -35, duration: .18 }, 'open')
-    .addLabel('handoff', .68)
-    .to('.intro h1', { xPercent: -42, scale: .58, duration: .28 }, 'handoff')
-    .to('.intro-canvas', { backgroundColor: '#08090b', duration: .28 }, 'handoff')
-    .to('.orb', { xPercent: 32, scale: .55, opacity: 0, duration: .28 }, 'handoff');
-
-  const portrait = gsap.timeline({ scrollTrigger: chapterConfig('.portrait-scene', 'chapter-portrait', () => vh() * (mobile ? 1.05 : 1.2), .2) });
-  portrait.addLabel('concealed', 0)
-    .set('.portrait-frame', { autoAlpha: 1 })
-    .fromTo('.portrait-intro h2', { yPercent: 50, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .16 }, 'concealed')
-    .fromTo('.portrait-reveal', { clipPath: 'inset(50% 0 50% 0)' }, { clipPath: 'inset(0% 0 0% 0)', duration: .24 }, 'concealed+=.08')
-    .fromTo('.portrait-frame img', { scale: mobile ? 1.05 : 1.12 }, { scale: 1, duration: .24 }, 'concealed+=.08')
-    .addLabel('open', .28)
-    .to('.portrait-intro', { xPercent: mobile ? -5 : -20, opacity: .18, duration: .18 }, 'open')
-    .to('.portrait-frame', { xPercent: mobile ? 0 : -30, scale: mobile ? 1 : 1.06, duration: .22 }, 'open')
-    .fromTo('.portrait-statement', { y: 65, opacity: 0 }, { y: 0, opacity: 1, duration: .18 }, 'open+=.05')
-    .addLabel('hero', .5)
-    .to('.portrait-frame', { scale: mobile ? 1.02 : 1.13, duration: .18 }, 'hero')
-    .to('.portrait-statement', { opacity: 1, duration: .18 }, 'hero')
-    .addLabel('exit', .68)
-    .to('.portrait-intro,.portrait-statement', { opacity: 0, y: -45, duration: .2 }, 'exit')
-    .to('.portrait-frame', { scale: mobile ? .36 : .28, xPercent: mobile ? 48 : 112, yPercent: mobile ? -18 : -8, opacity: .28, duration: .24 }, 'exit')
-    .to('.portrait-stage', { backgroundColor: '#020407', duration: .24 }, 'exit');
-
-  const earthSequence = { frame: 0 };
-  const camera = { zoom: 10.4, bearing: -8, pitch: 28 };
-  const place = gsap.timeline({
-    scrollTrigger: {
-      ...chapterConfig('.place-scene', 'chapter-place', () => vh() * (mobile ? 1.15 : 1.35), .16),
-      onUpdate: self => {
-        if (map && self.progress > .25) map.jumpTo({ center: [-56.1645, -34.9011], zoom: camera.zoom, bearing: camera.bearing, pitch: camera.pitch });
-      }
+  motion = gsap.matchMedia();
+  motion.add('(prefers-reduced-motion: no-preference)', () => {
+    let seen = false;
+    try { seen = sessionStorage.getItem('portfolio-intro') === 'seen'; } catch { /* No storage required. */ }
+    if (!seen && !location.hash) {
+      root.setAttribute('data-intro-running', '');
+      gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: () => root.removeAttribute('data-intro-running'), onInterrupt: () => root.removeAttribute('data-intro-running') })
+        .from('.hero-first,.hero-last', { y: 36, opacity: 0, stagger: .09, duration: .7 })
+        .from('.hero-portrait img', { y: 18, opacity: 0, clipPath: 'inset(12% 0 0 0)', duration: .65, clearProps: 'clipPath' }, .15)
+        .from('.hero-role,.hero-bottom,.hero-portrait figcaption', { y: 12, opacity: 0, stagger: .06, duration: .45 }, .35);
+      try { sessionStorage.setItem('portfolio-intro', 'seen'); } catch { /* Optional. */ }
     }
-  });
-  place.addLabel('world', 0)
-    .to(earthSequence, { frame: EARTH_FRAME_COUNT - 1, snap: 'frame', duration: .34, onUpdate: () => renderEarthFrame(earthSequence.frame) }, 'world')
-    .from('.world-copy', { opacity: 0, y: 55, duration: .12 }, 'world')
-    .addLabel('south-america', .14)
-    .to('.world-copy', { opacity: 0, y: -75, duration: .12 }, 'south-america')
-    .from('.coordinates', { opacity: 0, y: 55, duration: .14 }, 'south-america')
-    .addLabel('uruguay', .25)
-    .to('.coordinates', { opacity: 0, y: -60, duration: .1 }, 'uruguay')
-    .to('#earth', { opacity: 0, scale: 2.5, duration: .13 }, 'uruguay')
-    .set('#map', { visibility: 'visible' }, 'uruguay')
-    .to('#map,.map-shade,.map-credit', { opacity: 1, duration: .13 }, 'uruguay')
-    .to(camera, { zoom: 12.1, bearing: -2, pitch: 36, duration: .13 }, 'uruguay')
-    .addLabel('montevideo', .33)
-    .from('.city-copy', { opacity: 0, y: 85, duration: .12 }, 'montevideo')
-    .to(camera, { zoom: 13.8, bearing: 8, pitch: 46, duration: .22 }, 'montevideo')
-    .addLabel('hold-city', .58)
-    .to('.city-copy', { opacity: 1, y: 0, duration: .2 }, 'hold-city')
-    .addLabel('exit', .8)
-    .to('.city-copy', { opacity: 0, y: -45, duration: .2 }, 'exit')
-    .to('#map,.map-shade,.map-credit', { opacity: 0, scale: 1.06, duration: .2 }, 'exit');
-
-  const reg = gsap.timeline({ scrollTrigger: chapterConfig('.regcrim', 'chapter-regcrim', () => vh() * (mobile ? 1.05 : 1.15), .18) });
-  reg.addLabel('distance', 0)
-    .fromTo('.regcrim .product-copy', { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: .18 }, 'distance')
-    .fromTo('.reg-interface', { opacity: 0, scale: .52, rotationY: -24, rotationX: 10, xPercent: 22, transformPerspective: 1400 }, { opacity: 1, scale: 1, rotationY: 0, rotationX: 0, xPercent: 0, duration: .3 }, 'distance')
-    .addLabel('reveal', .3)
-    .to('.reg-interface', { scale: 1.02, rotationY: 0, rotationX: 0, xPercent: -5, duration: .28 }, 'reveal')
-    .from('.reg-map i,.reg-bars i,.reg-list i', { opacity: 0, scaleY: 0, stagger: .018, duration: .16 }, 'reveal+=.04')
-    .addLabel('feature', .62)
-    .to('.regcrim .product-copy', { opacity: 0, x: -100, duration: .15 }, 'feature')
-    .to('.reg-interface', { scale: 1.32, xPercent: -18, yPercent: -4, duration: .22 }, 'feature')
-    .addLabel('exit', .86)
-    .to('.reg-interface', { opacity: 0, xPercent: -80, duration: .14 }, 'exit');
-
-  const daw = gsap.timeline({ scrollTrigger: chapterConfig('.daw', 'chapter-daw', () => vh() * (mobile ? 1.1 : 1.25), .2) });
-  daw.addLabel('signal', 0)
-    .fromTo('.daw .product-copy', { opacity: 0, x: mobile ? -35 : -90 }, { opacity: 1, x: 0, duration: .16 }, 'signal')
-    .fromTo('.daw-interface', { opacity: 0, yPercent: 42, scale: .58, rotationX: 28, rotationZ: -3, transformPerspective: 1500, transformOrigin: '50% 100%' }, { opacity: 1, yPercent: 0, scale: 1, rotationX: 5, rotationZ: 0, duration: .27 }, 'signal')
-    .addLabel('assemble', .3)
-    .to('.daw-interface', { rotationX: 0, xPercent: mobile ? -4 : -7, duration: .2 }, 'assemble')
-    .from('.daw-toolbar,.daw-primary,.daw-metric,.daw-list', { opacity: 0, y: 55, stagger: .045, duration: .16 }, 'assemble+=.03')
-    .from('.daw-primary i,.daw-list i', { scaleX: 0, transformOrigin: 'left center', stagger: .025, duration: .14 }, 'assemble+=.09')
-    .addLabel('inspect', .62)
-    .to('.daw .product-copy', { opacity: 0, x: -55, duration: .13 }, 'inspect')
-    .to('.daw-interface', { scale: 1.24, xPercent: mobile ? -18 : -22, yPercent: -3, duration: .22 }, 'inspect')
-    .addLabel('handoff', .87)
-    .to('.daw-interface', { opacity: 0, yPercent: -48, xPercent: 14, rotationZ: 2, duration: .13 }, 'handoff');
-
-  const ops = gsap.timeline({ scrollTrigger: chapterConfig('.secretaria', 'chapter-secretaria', () => vh() * (mobile ? 1.05 : 1.15), .18) });
-  ops.addLabel('surface', 0)
-    .fromTo('.secretaria .product-copy', { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: .18 }, 'surface')
-    .fromTo('.ops-interface', { opacity: 0, scale: .65, z: -300, rotationX: 12, transformPerspective: 1300 }, { opacity: 1, scale: 1, z: 0, rotationX: 0, duration: .26 }, 'surface')
-    .addLabel('structure', .32)
-    .to('.ops-interface', { scale: 1, z: 0, rotationX: 0, xPercent: -7, duration: .24 }, 'structure')
-    .from('.ops-numbers span,.ops-flow i', { opacity: 0, y: 45, stagger: .035, duration: .14 }, 'structure+=.05')
-    .addLabel('focus', .62)
-    .to('.secretaria .product-copy', { opacity: 0, y: -55, duration: .14 }, 'focus')
-    .to('.ops-interface', { scale: 1.25, xPercent: -20, duration: .22 }, 'focus')
-    .addLabel('exit', .87)
-    .to('.ops-interface', { xPercent: -120, opacity: 0, duration: .13 }, 'exit');
-
-  const rumbo = gsap.timeline({ scrollTrigger: chapterConfig('.rumbo-project', 'chapter-rumbo', () => vh() * (mobile ? 1.05 : 1.15), .18) });
-  rumbo.addLabel('reveal', 0)
-    .fromTo('.rumbo-project .product-copy', { opacity: 0, x: -70 }, { opacity: 1, x: 0, duration: .18 }, 'reveal')
-    .fromTo('.rumbo-hero-image', { opacity: 0, scale: .84, yPercent: 18 }, { opacity: 1, scale: 1, yPercent: 0, duration: .28 }, 'reveal')
-    .from('.rumbo-thumbnails img,.rumbo-status', { opacity: 0, y: 35, stagger: .05, duration: .18 }, 'reveal+=.12')
-    .addLabel('explore', .42)
-    .to('.rumbo-hero-image img', { scale: 1.06, duration: .3 }, 'explore')
-    .to('.rumbo-thumbnails', { xPercent: mobile ? -4 : -8, duration: .3 }, 'explore')
-    .addLabel('focus', .72)
-    .to('.rumbo-project .product-copy', { opacity: 0, y: -45, duration: .14 }, 'focus')
-    .to('.rumbo-showcase', { scale: 1.08, xPercent: mobile ? -5 : -10, duration: .2 }, 'focus')
-    .addLabel('exit', .9)
-    .to('.rumbo-showcase', { opacity: 0, yPercent: -18, duration: .1 }, 'exit');
-
-  const nexus = gsap.timeline({ scrollTrigger: chapterConfig('.nexus', 'chapter-nexus', () => vh() * (mobile ? 1.05 : 1.15), .18) });
-  nexus.addLabel('type', 0)
-    .fromTo('.nexus .product-copy', { opacity: 0, x: -70 }, { opacity: 1, x: 0, duration: .16 }, 'type')
-    .fromTo('.nexus-interface', { opacity: 0, scale: .7, rotationY: 20, transformPerspective: 1300 }, { opacity: 1, scale: 1, rotationY: 0, duration: .25 }, 'type')
-    .addLabel('assemble', .28)
-    .from('.nexus-issue', { xPercent: -65, opacity: 0, duration: .2 }, 'assemble')
-    .from('.nexus-tile.one', { xPercent: 75, opacity: 0, duration: .18 }, 'assemble+=.04')
-    .from('.nexus-tile.two', { xPercent: 90, opacity: 0, duration: .18 }, 'assemble+=.1')
-    .from('.nexus-sphere', { scale: 0, rotation: 110, duration: .2 }, 'assemble+=.08')
-    .addLabel('read', .62)
-    .to('.nexus .product-copy', { opacity: 0, y: -65, duration: .14 }, 'read')
-    .to('.nexus-interface', { scale: 1.22, xPercent: -16, duration: .22 }, 'read')
-    .addLabel('disperse', .86)
-    .to('.nexus-issue', { xPercent: -50, duration: .14 }, 'disperse')
-    .to('.nexus-tile', { xPercent: 65, duration: .14 }, 'disperse')
-    .to('.nexus-sphere', { scale: 1.45, yPercent: 28, duration: .14 }, 'disperse');
-
-  gsap.from('.archive-list>*', { opacity: 0, y: 30, stagger: .06, scrollTrigger: { id: 'archive-reveal', trigger: '.archive', start: 'top 78%', end: 'top 42%', scrub: .22 } });
-  gsap.from('.trajectory-list article', { opacity: 0, y: 40, stagger: .1, scrollTrigger: { id: 'trajectory-reveal', trigger: '.trajectory-list', start: 'top 80%', end: 'center 62%', scrub: .22 } });
-  gsap.from('.contact h2 span,.contact h2 i', { yPercent: 100, opacity: 0, stagger: .1, scrollTrigger: { id: 'contact-reveal', trigger: '.contact', start: 'top 74%', end: 'top 38%', scrub: .25 } });
-
-  const chapterTriggers = new Map(ScrollTrigger.getAll().filter(trigger => trigger.vars.id?.startsWith('chapter-')).map(trigger => [trigger.trigger.id || trigger.trigger.dataset.product, trigger]));
-  menu.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
-    const id = link.hash.slice(1);
-    const trigger = chapterTriggers.get(id);
-    if (!trigger) return;
-    event.preventDefault();
-    closeMenu();
-    scrollTo({ top: trigger.start + 1, behavior: 'smooth' });
-    history.replaceState(null, '', link.hash);
-  }));
-
-  ScrollTrigger.addEventListener('refreshInit', () => map?.resize());
-  ScrollTrigger.refresh();
-  if (motionDebug) console.table(ScrollTrigger.getAll().map(trigger => ({ id: trigger.vars.id, start: Math.round(trigger.start), end: Math.round(trigger.end), distance: Math.round(trigger.end - trigger.start) })));
-  requestAnimationFrame(() => {
-    if (!initialHash) return;
-    const id = initialHash.slice(1);
-    const trigger = chapterTriggers.get(id);
-    if (trigger) {
-      scrollTo(0, trigger.start + 1);
-      history.replaceState(null, '', initialHash);
-    }
+    // Animate decoration, never hide or delay essential descriptions and controls.
+    document.querySelectorAll('.product-stage').forEach(stage => {
+      const visual = stage.querySelector('.reg-interface,.daw-interface,.ops-interface,.rumbo-showcase,.nexus-interface');
+      const product = stage.closest('[data-product]').dataset.product;
+      const direction = product === 'daw' ? { x: -18 } : product === 'nexus' ? { x: 14 } : { y: product === 'secretaria' ? 14 : 24 };
+      gsap.from(visual, { ...direction, duration: product === 'rumbo' ? .8 : .65, ease: 'power2.out', scrollTrigger: { trigger: stage, start: 'top 92%', once: true } });
+    });
+    gsap.from('.trajectory-title h2', { y: 16, duration: .7, ease: 'power2.out', scrollTrigger: { trigger: '.trajectory-title', start: 'top 92%', once: true } });
+    gsap.from('.contact h2', { y: 20, duration: .7, ease: 'power2.out', scrollTrigger: { trigger: '.contact', start: 'top 92%', once: true } });
+    gsap.from('.profile-symbol', { rotation: -55, duration: .8, ease: 'power2.out', scrollTrigger: { trigger: '.portrait-scene', start: 'top 90%', once: true } });
+    gsap.to('.progress i', { scaleY: 1, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: true } });
+    return () => root.removeAttribute('data-intro-running');
   });
 }
-
-let resizeTimer;
-addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    resizeCanvas();
-    window.ScrollTrigger?.refresh();
-  }, 160);
-}, { passive: true });
-
-addEventListener('pagehide', () => {
-  window.ScrollTrigger?.getAll().forEach(trigger => trigger.kill());
-  map?.remove();
-  map = undefined;
-}, { once: true });
-
-async function boot() {
-  root.dataset.motion = reducedMotion ? 'reduced' : 'full';
-  enableCinematicMotionStyles();
-  resizeCanvas();
-  renderEarthFrame(0);
-  const portrait = document.querySelector('.portrait-frame img');
-  await Promise.race([
-    Promise.allSettled([document.fonts?.ready, portrait?.decode?.()]),
-    new Promise(resolve => setTimeout(resolve, 1200))
-  ]);
-  createMap();
-  initMotion();
+initMotion();
+let sectionObserver;
+function initSectionIndicator() {
+  if (!window.IntersectionObserver) return;
+  const visible = new Map();
+  const links = [...menu.querySelectorAll('a[href^="#"]')];
+  sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) visible.set(entry.target.id, entry.boundingClientRect.top);
+      else visible.delete(entry.target.id);
+    });
+    const active = [...visible].sort((a, b) => b[1] - a[1])[0]?.[0];
+    const id = active === 'place' ? 'portrait' : active;
+    links.forEach(link => {
+      if (link.hash === `#${id}`) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }, { rootMargin: '-20% 0px -55% 0px', threshold: 0 });
+  document.querySelectorAll('main>section[id]').forEach(section => sectionObserver.observe(section));
 }
-
-if (document.readyState === 'loading') addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
+initSectionIndicator();
+// Restore optional animation after bfcache navigation without removing core events.
+addEventListener('pagehide', () => { motion?.revert(); motion = undefined; sectionObserver?.disconnect(); });
+addEventListener('pageshow', event => { if (event.persisted) { initMotion(); initSectionIndicator(); } });

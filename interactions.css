@@ -1,0 +1,158 @@
+/* Pointer transforms are independent of GSAP's transform property. */
+.hero-first, .hero-last, .hero-portrait, .hero-light, .hero-edition,
+.hero-actions .button, .project-detail, .contact-links a, .lang,
+.reg-interface, .daw-primary, .ops-interface, .rumbo-showcase, .nexus-sphere {
+  translate: var(--pointer-x, 0px) var(--pointer-y, 0px);
+}
+.hero-composition { isolation: isolate; }
+.hero-light {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  inset: 5% -1% 0 25%;
+  background: radial-gradient(ellipse at 65% 70%, #5b302331, transparent 68%);
+}
+.hero-portrait {
+  left: 54%;
+  width: clamp(340px, 32vw, 460px);
+}
+.hero-portrait::before { content: none; }
+.hero-portrait img {
+  /* Soft monochrome: retain a trace of natural color beside the editorial red. */
+  filter: grayscale(.65);
+  /* The exported color halftone already owns its gradual alpha at the base. */
+  mask-image: none;
+}
+.hero-portrait figcaption {
+  top: auto;
+  bottom: 12%;
+  right: -4%;
+  transform: none;
+  background: #201916;
+  border: 1px solid #c3886e66;
+  color: #eadbd0;
+}
+.hero-portrait figcaption>span:first-child { color: #d89580; }
+.editorial-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: difference;
+  transition: opacity .12s;
+  contain: layout style;
+}
+.editorial-cursor.is-visible { opacity: 1; }
+/* Native dialogs live in the top layer, above the document cursor. */
+html:has(dialog[open]) .editorial-cursor { opacity: 0; }
+html.pointer-ready:has(dialog[open]), .pointer-ready dialog[open] { cursor: auto; }
+.pointer-ready dialog[open] a, .pointer-ready dialog[open] button { cursor: pointer; }
+.cursor-shape {
+  display: grid;
+  place-items: center;
+  width: 8px;
+  height: 8px;
+  background: white;
+  color: black;
+  border: 1px solid white;
+  border-radius: 1px;
+  transform: translate(-50%, -50%);
+  transition: width .18s, height .18s, background .18s;
+}
+.cursor-shape span { font: 500 8px var(--body); letter-spacing: .06em; white-space: nowrap; }
+.editorial-cursor[data-context="link"] .cursor-shape { width: 20px; height: 20px; background: transparent; }
+.editorial-cursor[data-context="project"] .cursor-shape { width: 74px; height: 28px; }
+.editorial-cursor[data-context="open"] .cursor-shape { width: 54px; height: 26px; }
+.nav nav a { position: relative; transition: color .2s; }
+.nav nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .22s;
+}
+.nav nav a:hover::after, .nav nav a:focus-visible::after { transform: scaleX(1); }
+.contact-links a i, .button>span:last-child { transition: transform .2s; }
+.contact-links a:hover i, .contact-links a:focus-visible i { transform: translate(3px, -3px); }
+.button:hover>span:last-child, .button:focus-visible>span:last-child { transform: translate(2px, 2px); }
+.product-copy h3 { transition: color .25s, translate .25s; }
+.product-stage { transition: border-color .25s; }
+.product-stage:focus-within { border-color: #d5a79680; }
+.product-stage:focus-within .project-detail i { transform: translate(3px, -3px); }
+.product-stage:focus-within .product-copy h3 { translate: 3px 0; }
+.nav nav a[aria-current="location"] { color: var(--white); }
+.nav nav a[aria-current="location"]::after { transform: scaleX(1); }
+.archive-list a b { transition: translate .2s; }
+.archive-list a:is(:hover,:focus-visible) b { translate: 3px -2px; }
+.project-hover-note {
+  display: block;
+  margin-top: 20px;
+  color: var(--product-muted);
+  font: 400 8px/1.6 var(--body);
+  letter-spacing: .11em;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.pointer-ready, .pointer-ready a, .pointer-ready button { cursor: none; }
+  .product-stage:hover { border-color: #d5a79680; }
+  .product-stage:hover .project-detail i { transform: translate(4px, -4px); }
+  .product-stage:hover .product-copy h3 { color: #e0a38d; translate: 3px 0; }
+  .secretaria .product-stage:hover .product-copy h3 { color: #7d392c; }
+  .project-hover-note { opacity: 1; transition: transform .25s; }
+  .product-stage:is(:hover,:focus-within) .project-hover-note { opacity: 1; transform: translateX(4px); }
+  .reg-interface { transition: rotate .4s; }
+  .regcrim .product-stage:hover .reg-interface { rotate: 2deg; }
+  .regcrim .product-stage:hover .reg-map i { background: #e6d4bd; }
+  .daw-primary i { transition: opacity .3s, translate .3s; }
+  .daw .product-stage:hover .daw-primary i:nth-child(even) { translate: 6px 0; opacity: .7; }
+  .ops-flow i { transition: translate .3s; }
+  .secretaria .product-stage:hover .ops-flow i:nth-child(odd) { translate: 8px 0; }
+  .rumbo-thumbnails { transition: transform .4s; }
+  .rumbo-project .product-stage:hover .rumbo-thumbnails { transform: translateY(-7px); }
+  .nexus-tile { transition: translate .35s; }
+  .nexus .product-stage:hover .nexus-tile.one { translate: 0 -5px; }
+  .nexus .product-stage:hover .nexus-tile.two { translate: 0 5px; }
+}
+@media (min-width: 701px) and (max-width: 1000px) {
+  .hero-portrait { left: 51%; width: clamp(290px, 42vw, 350px); }
+}
+/* Full-height desktop composition; the photograph is never enlarged past 460px. */
+@media (min-width: 701px) {
+  .intro { min-height: calc(100svh - 80px); display: flex; flex-direction: column; }
+  .hero-composition { flex: 1; width: 100%; min-height: 440px; height: auto; }
+  .intro h1 { font-size: clamp(100px, min(18.5vw, 25svh), 290px); }
+  .hero-bottom { margin-top: 20px; }
+}
+.hero-summary { max-width: 390px; }
+.hero-summary>p:first-child { color: #b9b7ae; font-size: 13px; line-height: 1.65; margin: 0; }
+.hero-qualification { color: #a5a49c; font-size: 9px; line-height: 1.6; margin: 10px 0 0; }
+/* Alternate the editorial rhythm; Rumbo gets the widest visual presentation. */
+@media (min-width: 1001px) {
+  .daw .product-stage { grid-template-columns: 1.2fr .8fr; }
+  .daw .product-copy { grid-column: 2; grid-row: 2; }
+  .daw .daw-interface { grid-column: 1; grid-row: 2 / 4; }
+  .daw .project-detail { grid-column: 2; }
+  .rumbo-project .product-stage { grid-template-columns: 1.3fr .7fr; min-height: 0; }
+  .rumbo-project .product-copy { grid-column: 1; grid-row: 2; max-width: 650px; }
+  .rumbo-project .product-copy h3 { font-size: clamp(70px, 7vw, 108px); }
+  .rumbo-project .product-copy p { max-width: 480px; }
+  .rumbo-project .project-detail { grid-column: 2; grid-row: 2; justify-self: end; }
+  .rumbo-project .rumbo-showcase { grid-column: 1 / -1; grid-row: 3; height: 440px; }
+  .rumbo-project .rumbo-hero-image figcaption b { font-size: clamp(40px, 4vw, 60px); }
+}
+@media (max-width: 700px) {
+  .hero-portrait { width: min(84vw, 380px); left: auto; right: -5px; }
+  .hero-light { inset: 20% 0 0; }
+  .hero-composition { height: 450px; }
+  .hero-role { bottom: 2%; background: #0a0a09eb; font-size: 20px; }
+  .project-hover-note { margin-top: 14px; font-size: 8px; }
+}
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .editorial-cursor { display: none; }
+}
