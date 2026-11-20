@@ -1,0 +1,217 @@
+/* ==========================================================================
+   Responsive & Touch Device Rules
+   ========================================================================== */
+
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor,
+  .archive-preview {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1040px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portrait-card {
+    max-width: 360px;
+  }
+
+  .now-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .now-location {
+    padding-left: 0;
+    padding-top: 14px;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .project-stage {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding-block: 32px;
+  }
+
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .about-manifesto {
+    position: static;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-pill {
+    height: 58px;
+    padding: 0 8px 0 10px;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 84px;
+    left: var(--gutter);
+    right: var(--gutter);
+    padding: 14px;
+    border-radius: var(--radius-lg);
+    background: rgba(11, 13, 18, 0.96);
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(18px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.25s var(--ease-spring),
+      transform 0.25s var(--ease-spring),
+      visibility 0.25s;
+  }
+
+  .nav-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav-links a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .cmd-trigger .cmd-label {
+    display: none;
+  }
+
+  .cmd-trigger {
+    padding: 0 10px;
+  }
+
+  .nav-controls {
+    gap: 6px;
+  }
+
+  .sound-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .hero {
+    padding-top: 108px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .portrait-card {
+    max-width: 100%;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .archive-row {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    row-gap: 4px;
+    padding: 16px 8px;
+  }
+
+  .archive-row:hover {
+    padding-inline: 12px;
+  }
+
+  .archive-stack {
+    grid-column: 2 / 4;
+  }
+
+  .stack-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drawer-header,
+  .drawer-content {
+    padding-inline: 20px;
+  }
+
+  .drawer-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-cta-group {
+    width: 100%;
+  }
+
+  .contact-cta-group .btn {
+    flex: 1 1 200px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cmd-trigger {
+    display: none;
+  }
+
+  .brand-name {
+    font-size: 13px;
+  }
+
+  .rbac-pipe {
+    grid-template-columns: 1fr;
+  }
+
+  .rbac-beam {
+    width: 100%;
+  }
+
+  .fitness-phone {
+    width: 100%;
+    max-width: 276px;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
+  }
+}

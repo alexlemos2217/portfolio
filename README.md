@@ -1,30 +1,75 @@
-# Alexander Lemos — Portfolio
+# Alexander Lemos — Backend & Full-Stack Software Developer Portfolio
 
-Portfolio bilingüe y cinematográfico construido con HTML, CSS y JavaScript. El recorrido usa escenas sticky y timelines reversibles con GSAP/ScrollTrigger, una visualización canvas del viaje hacia Montevideo, MapLibre con cartografía de OpenStreetMap y presentaciones conceptuales de proyectos privados sin datos sensibles.
+Portfolio técnico bilingüe (ES/EN) construido con **HTML5 semántico, CSS modular y JavaScript ES Modules nativos**, sin frameworks pesados ni scroll-jacking.
+
+Diseñado con estética *Tactile Editorial Engineering*: foco claro en ingeniería backend (`C#/.NET`, `Java/Spring Boot`, `PHP`, `SQL`), 60fps reales, atmósfera de iluminación ambiental dinámica al scroll, accesibilidad por teclado, soporte estricto de `prefers-reduced-motion: reduce` y artefactos interactivos propios.
+
+## Qué incluye
+
+- **Hero Editorial + bloque `NOW` en vivo**: posicionamiento inmediato, CTAs limpios (`Ver proyectos ↓`, `Copiar email`, `GitHub`, `LinkedIn`) y reloj en tiempo real de Montevideo (`UYT`).
+- **Iluminación ambiental viva + barra de lectura 2px**: halo/aurora GPU que transiciona de color según la sección activa y barra de progreso superior ultra-fina.
+- **Showcase de proyectos con parallax interno y Case Study Drawer**:
+  - **BIOS Work** (`Java · Spring Boot · Spring Security · SQL`): simulador interactivo de matriz RBAC por rol (`ADMIN / STAFF / USER`).
+  - **BIOS Fitness** (`Flutter · Dart · BLoC · SQLite`): mockup móvil flotante con anillo de progreso y métricas semanales.
+  - **Sistemas de Gestión Operativa & Datos** (`PHP · MariaDB / MySQL · SQL · NDA`): vista de arquitectura en capas y consulta SQL indexada.
+  - **Archive interactivo**: decodificación de texto sutil (`scramble`) al hover + vista previa flotante que sigue al cursor.
+- **Systems Lab**:
+  - **Live API Playground**: consola interactiva (`GET /api/v1/alex`, `/stack`, `/projects`, `/contact`, comandos `help`, `clear`) con syntax highlighting JSON y latencia real.
+  - **Interactive Architecture Flow**: diagrama SVG con 3 escenarios clickeables (`200 OK Cache Miss ~18ms`, `200 OK Cache Hit ~2ms`, `401 Unauthorized`) y consola de logs con timestamps reales.
+- **Paleta de comandos (`Ctrl + K` / `⌘ + K`) y micro-sonidos Web Audio opcionales** (apagados por defecto, activables desde la navbar sin archivos externos).
+
+## Estructura del proyecto
+
+```text
+.
+├── index.html
+├── favicon.svg
+├── og-image.svg
+├── robots.txt
+├── sitemap.xml
+└── assets/
+    ├── css/
+    │   ├── tokens.css
+    │   ├── base.css
+    │   ├── layout.css
+    │   ├── showcase.css
+    │   ├── lab.css
+    │   ├── components.css
+    │   └── responsive.css
+    ├── img/
+    │   ├── alex.jpg
+    │   └── og-image.png
+    └── js/
+        ├── main.js
+        ├── data/
+        │   └── content.js
+        └── modules/
+            ├── apiLab.js
+            ├── archFlow.js
+            ├── clock.js
+            ├── commandPalette.js
+            ├── cursor.js
+            ├── drawer.js
+            ├── i18n.js
+            ├── scramble.js
+            ├── sound.js
+            └── tiltGlow.js
+```
 
 ## Desarrollo local
 
-No requiere compilación ni instalación de dependencias. GSAP y MapLibre se cargan desde jsDelivr; la cartografía usa teselas estándar de OpenStreetMap. Serví la raíz con cualquier servidor estático, por ejemplo:
+Por usar ES Modules (`type="module"`), serví la raíz con cualquier servidor HTTP estático:
 
 ```bash
 npx serve .
 ```
 
-Abrí la URL local informada por el servidor. Abrir `index.html` directamente también funciona, salvo restricciones del navegador sobre recursos remotos.
+o con Python:
 
-## Estructura
-
-- `index.html`: contenido, escenas, navegación y metadatos.
-- `style.css`: dirección visual, motion, responsive y modo de movimiento reducido.
-- `index.js`: timelines, idioma, navegación, diálogos, globo canvas y configuración de MapLibre.
-- `img/alex.jpg`: retrato real utilizado en la escena personal.
-
-Los textos en español e inglés viven en atributos `data-es` y `data-en`. Los datos públicos de contacto y los enlaces reales se mantienen en `index.html`.
+```bash
+python -m http.server 8080
+```
 
 ## Despliegue
 
-El sitio es compatible con GitHub Pages porque usa rutas relativas y no necesita build. Publicá la raíz de la rama elegida mediante Pages. No se requieren variables de entorno ni servicios pagos.
-
-## Privacidad y fallbacks
-
-Las interfaces de REGCRIM, DAW y Secretaría son composiciones conceptuales con datos sintéticos. No contienen capturas ni información institucional. DAW se presenta como un sistema de información institucional privado; sus tecnologías no se publican porque no están verificadas en las fuentes disponibles. El mapa conserva un enlace de atribución a OpenStreetMap. Con `prefers-reduced-motion: reduce`, las escenas se convierten en una lectura lineal y todo el contenido permanece accesible.
+Compatible de forma directa con **GitHub Pages** desde la raíz de `main`.

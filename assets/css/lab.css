@@ -1,0 +1,389 @@
+/* ==========================================================================
+   Systems Lab — Live API Playground & Interactive Architecture Flow
+   ========================================================================== */
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.lab-panel {
+  border-radius: var(--radius-xl);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.lab-topbar {
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lab-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.lab-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.lab-dots i:nth-child(1) { background: #ef4444; opacity: 0.7; }
+.lab-dots i:nth-child(2) { background: #f59e0b; opacity: 0.7; }
+.lab-dots i:nth-child(3) { background: #22c55e; opacity: 0.7; }
+
+.lab-title-bar {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-secondary);
+}
+
+.lab-status-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.http-status {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(var(--emerald-rgb), 0.14);
+  color: var(--emerald);
+  border: 1px solid rgba(var(--emerald-rgb), 0.3);
+}
+
+.http-status.is-error {
+  background: rgba(251, 113, 133, 0.14);
+  color: var(--rose);
+  border-color: rgba(251, 113, 133, 0.35);
+}
+
+.http-latency {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+/* API Playground Controls */
+.api-endpoints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.endpoint-chip {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: border-color var(--t-fast), background var(--t-fast), color var(--t-fast);
+}
+
+.endpoint-chip .method {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.endpoint-chip:hover,
+.endpoint-chip.is-active {
+  border-color: rgba(var(--cyan-rgb), 0.5);
+  background: rgba(var(--cyan-rgb), 0.12);
+  color: var(--ink);
+}
+
+.api-console-output {
+  margin: 0;
+  padding: 16px;
+  min-height: 248px;
+  max-height: 310px;
+  overflow: auto;
+  border-radius: var(--radius-md);
+  background: #06070a;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.syn-key { color: var(--syn-key); }
+.syn-str { color: var(--syn-str); }
+.syn-num { color: var(--syn-num); }
+.syn-bool { color: var(--syn-bool); }
+.syn-punct { color: var(--syn-punct); }
+
+.api-prompt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 14px;
+  border-radius: var(--radius-md);
+  background: #06070a;
+  border: 1px solid var(--border);
+  transition: border-color var(--t-fast);
+}
+
+.api-prompt:focus-within {
+  border-color: rgba(var(--cyan-rgb), 0.55);
+}
+
+.api-prompt-caret {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+}
+
+.api-prompt input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+
+.api-prompt input::placeholder {
+  color: var(--ink-muted);
+}
+
+.api-run-btn {
+  min-height: 34px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(var(--cyan-rgb), 0.4);
+  background: rgba(var(--cyan-rgb), 0.14);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink);
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.api-run-btn:hover {
+  background: rgba(var(--cyan-rgb), 0.24);
+  border-color: var(--cyan);
+}
+
+/* Architecture Flow Panel */
+.arch-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.arch-scenarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.scenario-btn {
+  min-height: 34px;
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.025);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-secondary);
+  transition: all var(--t-fast);
+}
+
+.scenario-btn.is-active,
+.scenario-btn:hover {
+  border-color: rgba(var(--cyan-rgb), 0.45);
+  background: rgba(var(--cyan-rgb), 0.12);
+  color: var(--ink);
+}
+
+.arch-canvas-wrap {
+  padding: 16px 10px;
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(var(--cyan-rgb), 0.08), transparent 70%),
+    #06070a;
+  border: 1px solid var(--border);
+}
+
+.arch-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.arch-edge {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+}
+
+.arch-edge-active {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.arch-node rect {
+  fill: #10141c;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1.2;
+  transition: stroke 0.28s, fill 0.28s, filter 0.28s;
+}
+
+.arch-node.is-active rect {
+  fill: #122133;
+  stroke: var(--cyan);
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.45));
+}
+
+.arch-node.is-hit rect {
+  fill: #0d261e;
+  stroke: var(--emerald);
+  filter: drop-shadow(0 0 14px rgba(52, 211, 153, 0.55));
+}
+
+.arch-node.is-error rect {
+  fill: #2a1219;
+  stroke: var(--rose);
+  filter: drop-shadow(0 0 14px rgba(251, 113, 133, 0.6));
+}
+
+.arch-node.is-done rect {
+  stroke: rgba(52, 211, 153, 0.65);
+}
+
+.arch-node-title {
+  fill: var(--ink);
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.arch-node-sub {
+  fill: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 9.2px;
+}
+
+.arch-packet {
+  fill: #e0f2fe;
+  filter: drop-shadow(0 0 8px #38bdf8);
+  opacity: 0;
+  transition: fill 0.2s;
+}
+
+.arch-packet.is-flying {
+  opacity: 1;
+}
+
+.arch-packet.is-hit {
+  fill: #6ee7b7;
+  filter: drop-shadow(0 0 10px #34d399);
+}
+
+.arch-packet.is-error {
+  fill: #fda4af;
+  filter: drop-shadow(0 0 10px #fb7185);
+}
+
+.arch-trace {
+  list-style: none;
+  margin: 0;
+  padding: 14px 16px;
+  min-height: 164px;
+  border-radius: var(--radius-md);
+  background: #06070a;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.arch-trace li {
+  display: flex;
+  gap: 10px;
+  color: var(--ink-secondary);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: traceIn 0.28s var(--ease-spring) forwards;
+}
+
+.arch-trace .trace-ms {
+  color: var(--cyan);
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.arch-trace .trace-ok {
+  color: var(--emerald);
+}
+
+.arch-trace .trace-warn {
+  color: var(--amber);
+}
+
+.arch-trace .trace-err {
+  color: var(--rose);
+}
+
+.scenario-btn[data-scenario='hit'].is-active {
+  border-color: rgba(var(--emerald-rgb), 0.55);
+  background: rgba(var(--emerald-rgb), 0.14);
+  color: var(--emerald);
+}
+
+.scenario-btn[data-scenario='unauth'].is-active {
+  border-color: rgba(251, 113, 133, 0.55);
+  background: rgba(251, 113, 133, 0.14);
+  color: var(--rose);
+}
+
+@keyframes traceIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

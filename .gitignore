@@ -1,0 +1,17 @@
+# OS & Editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# IDE / Workspace
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local tooling / dependencies if ever added
+node_modules/
+dist/
+.env
+.env.local

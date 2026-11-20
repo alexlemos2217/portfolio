@@ -3,88 +3,920 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#030405">
-  <meta name="description" content="Alexander Lemos — Software Developer y Creative Technologist en Montevideo. Sistemas web, datos y experiencias digitales.">
-  <meta name="author" content="Alexander Lemos"><meta name="robots" content="index,follow">
-  <meta property="og:type" content="website"><meta property="og:title" content="Alexander Lemos — Software Developer"><meta property="og:description" content="Software para necesidades reales. Diseñado y desarrollado en Montevideo."><meta property="og:image" content="og-image.svg"><meta property="og:locale" content="es_UY"><meta property="og:locale:alternate" content="en_US"><meta name="twitter:card" content="summary_large_image">
-  <title>Alexander Lemos — Software Developer</title>
+  <meta name="theme-color" content="#07080a">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Alexander Lemos — Backend & Full-Stack Software Developer en Montevideo. APIs en C#/.NET, Java/Spring Boot, PHP, SQL y productos digitales.">
+  <meta name="author" content="Alexander Lemos">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://alexlemos2217.github.io/portfolio/">
+
+  <!-- Open Graph & Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alexander Lemos">
+  <meta property="og:url" content="https://alexlemos2217.github.io/portfolio/">
+  <meta property="og:title" content="Alexander Lemos — Backend & Full-Stack Software Developer">
+  <meta property="og:description" content="Diseño y construyo sistemas backend, APIs y productos digitales desde Montevideo, Uruguay. C#/.NET · Java/Spring Boot · PHP · SQL.">
+  <meta property="og:image" content="https://alexlemos2217.github.io/portfolio/assets/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_UY">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alexander Lemos — Backend & Full-Stack Software Developer">
+  <meta name="twitter:description" content="Sistemas backend, APIs y productos digitales. C#/.NET · Java/Spring Boot · PHP · SQL.">
+  <meta name="twitter:image" content="https://alexlemos2217.github.io/portfolio/assets/img/og-image.png">
+
+  <title>Alexander Lemos — Backend & Full-Stack Software Developer</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=rumbo-case-study-1">
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js" defer></script><script src="index.js?v=rumbo-case-study-1" defer></script>
+
+  <!-- Fonts: Plus Jakarta Sans + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/showcase.css">
+  <link rel="stylesheet" href="assets/css/lab.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <!-- Structured Data (JSON-LD Person) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Alexander Lemos",
+      "jobTitle": "Backend & Full-Stack Software Developer",
+      "url": "https://alexlemos2217.github.io/portfolio/",
+      "image": "https://alexlemos2217.github.io/portfolio/assets/img/alex.jpg",
+      "email": "mailto:alexlemos2297@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Montevideo",
+        "addressCountry": "UY"
+      },
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "Universidad ORT Uruguay" },
+        { "@type": "EducationalOrganization", "name": "Instituto BIOS" }
+      ],
+      "knowsAbout": ["C#", ".NET", "Java", "Spring Boot", "PHP", "SQL", "SQL Server", "MariaDB", "MySQL", "Flutter", "REST APIs"],
+      "sameAs": [
+        "https://github.com/alexlemos2217",
+        "https://www.linkedin.com/in/alexlemos22"
+      ]
+    }
+  </script>
+
+  <script type="module" src="assets/js/main.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-es="Saltar al contenido" data-en="Skip to content">Saltar al contenido</a>
-  <div class="grain" aria-hidden="true"></div><div class="progress" aria-hidden="true"><i></i></div>
-  <header class="nav" id="top"><a class="monogram" href="#intro" aria-label="Alexander Lemos — inicio">AL<i></i></a><nav id="menu" aria-label="Navegación principal"><a href="#portrait" data-es="Perfil" data-en="Profile">Perfil</a><a href="#place" data-es="Montevideo" data-en="Montevideo">Montevideo</a><a href="#projects" data-es="Trabajo" data-en="Work">Trabajo</a><a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a></nav><div class="nav-actions"><button class="lang" type="button" aria-label="Switch to English"><b>ES</b><span>EN</span></button><button class="menu-button" type="button" aria-label="Abrir menú" aria-controls="menu" aria-expanded="false"><i></i><i></i></button></div></header>
+  <div class="scroll-progress" aria-hidden="true"><span class="scroll-progress-bar"></span></div>
+  <div class="bg-grain" aria-hidden="true"></div>
+  <div class="bg-aura" aria-hidden="true">
+    <span class="aura-orb aura-orb--primary"></span>
+    <span class="aura-orb aura-orb--secondary"></span>
+  </div>
+
+  <!-- Floating Minimalist Top Bar -->
+  <header class="site-header">
+    <div class="nav-pill">
+      <a class="brand-link" href="#top" aria-label="Alexander Lemos — inicio" data-aria-es="Alexander Lemos — inicio" data-aria-en="Alexander Lemos — home">
+        <img class="brand-avatar" src="assets/img/alex.jpg" alt="Alexander Lemos" width="32" height="32" decoding="async">
+        <span class="brand-name">Alexander Lemos</span>
+        <span class="brand-status" aria-hidden="true"></span>
+      </a>
+
+      <nav class="nav-links" id="primary-nav" aria-label="Navegación principal" data-aria-es="Navegación principal" data-aria-en="Main navigation">
+        <a href="#work" data-es="Proyectos" data-en="Work">Proyectos</a>
+        <a href="#lab" data-es="Lab" data-en="Lab">Lab</a>
+        <a href="#about" data-es="Perfil" data-en="About">Perfil</a>
+        <a href="#contact" data-es="Contacto" data-en="Contact">Contacto</a>
+      </nav>
+
+      <div class="nav-controls">
+        <button class="lang-toggle" type="button" aria-label="Switch to English">
+          <span data-lang-opt="es" class="is-active">ES</span>
+          <span data-lang-opt="en">EN</span>
+        </button>
+        <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="Activar sonidos táctiles" data-cursor="Sonido OFF" data-cursor-en="Sound OFF">
+          <svg class="icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H2v6h4l5 4V5Z"></path>
+            <line x1="22" y1="9" x2="16" y2="15"></line>
+            <line x1="16" y1="9" x2="22" y2="15"></line>
+          </svg>
+          <svg class="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H2v6h4l5 4V5Z"></path>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        </button>
+        <button class="cmd-trigger" type="button" aria-label="Abrir paleta de comandos" data-aria-es="Abrir paleta de comandos" data-aria-en="Open command palette" data-cursor="Comandos" data-cursor-en="Commands">
+          <span class="cmd-label" data-es="Buscar" data-en="Search">Buscar</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+        <button class="menu-toggle" type="button" aria-label="Abrir menú" data-aria-es="Abrir menú" data-aria-en="Open menu" aria-controls="primary-nav" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
   <main id="main">
-    <section class="intro" id="intro" aria-labelledby="intro-title">
-      <div class="intro-canvas" aria-hidden="true"><div class="orb"><i></i><i></i></div><div class="horizon"></div></div>
-      <div class="intro-copy"><p class="overline">MONTEVIDEO · 34.9° S</p><h1 id="intro-title"><span class="line"><i>ALEXANDER</i></span><span class="line outline"><i>LEMOS</i></span></h1><div class="intro-meta"><p data-es="Software Developer / Creative Technologist" data-en="Software Developer / Creative Technologist">Software Developer / Creative Technologist</p><p data-es="Diseño y desarrollo sistemas para necesidades concretas." data-en="I design and build systems for concrete needs.">Diseño y desarrollo sistemas para necesidades concretas.</p></div></div>
-      <div class="scroll-note"><span data-es="Desplazá para entrar" data-en="Scroll to enter">Desplazá para entrar</span><i></i></div>
-    </section>
+    <!-- 01 · HERO EDITORIAL MONUMENTAL + NOW -->
+    <section class="hero" id="top" data-theme-section="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="hero-badge">
+              <span class="dot" aria-hidden="true"></span>
+              <span>BACKEND &amp; FULL-STACK DEVELOPER · C#/.NET · JAVA · PHP · SQL</span>
+            </p>
 
-    <section class="portrait-scene" id="portrait" aria-labelledby="portrait-title">
-      <div class="portrait-stage">
-        <div class="portrait-intro"><p class="overline">01 / ALEXANDER</p><h2 id="portrait-title"><span data-es="Primero," data-en="First,">Primero,</span><br><span data-es="el problema." data-en="the problem.">el problema.</span></h2></div>
-        <figure class="portrait-frame"><div class="portrait-reveal"><img src="img/alex.jpg" alt="Retrato de Alexander Lemos" width="460" height="460"></div><figcaption><span>ALEXANDER LEMOS</span><span>SOFTWARE DEVELOPER · MVD</span></figcaption></figure>
-        <p class="portrait-statement" data-es="Trabajo entre interfaces, lógica y datos. La herramienta viene después de entender qué tiene que funcionar y para quién." data-en="I work across interfaces, logic and data. The tool comes after understanding what needs to work and who it needs to work for.">Trabajo entre interfaces, lógica y datos. La herramienta viene después de entender qué tiene que funcionar y para quién.</p>
-        <p class="portrait-ghost" aria-hidden="true">PERSON / SYSTEM</p>
-      </div>
-    </section>
+            <h1 class="hero-title" id="hero-title">
+              <span class="line-mask"><span style="--d:0">Alexander Lemos —</span></span><br>
+              <span class="line-mask"><span style="--d:1" data-es="Diseño y construyo" data-en="I design and build">Diseño y construyo</span></span><br>
+              <span class="line-mask"><span style="--d:2" class="accent-phrase" data-es="sistemas backend, APIs" data-en="backend systems, APIs">sistemas backend, APIs</span></span><br>
+              <span class="line-mask"><span style="--d:3" data-es="y productos digitales." data-en="and digital products.">y productos digitales.</span></span>
+            </h1>
 
-    <section class="place-scene" id="place" aria-labelledby="place-title">
-      <div class="place-stage">
-        <canvas id="earth" aria-hidden="true"></canvas><div id="map" aria-label="Mapa interactivo de Montevideo"></div><div class="map-shade" aria-hidden="true"></div>
-        <div class="world-copy"><p class="overline">02 / CONTEXT</p><h2 id="place-title"><span data-es="Todo sistema" data-en="Every system">Todo sistema</span><br><span data-es="pertenece a un lugar." data-en="belongs somewhere.">pertenece a un lugar.</span></h2></div>
-        <div class="coordinates"><p>SOUTH AMERICA</p><strong>34.9011° S<br>56.1645° W</strong></div>
-        <div class="city-copy"><p>MONTEVIDEO / URUGUAY</p><h2>MONTEVIDEO</h2><span data-es="La ciudad como contexto. El mapa como interfaz." data-en="The city as context. The map as interface.">La ciudad como contexto. El mapa como interfaz.</span></div>
-        <p class="map-credit">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
-      </div>
-    </section>
+            <p class="hero-lead" data-es="Transformo reglas de negocio complejas y bases de datos relacionales en software confiable, seguro y rápido de usar. Desde Montevideo, Uruguay." data-en="I turn complex business logic and relational databases into reliable, secure and fast software. Based in Montevideo, Uruguay.">Transformo reglas de negocio complejas y bases de datos relacionales en software confiable, seguro y rápido de usar. Desde Montevideo, Uruguay.</p>
 
-    <section class="projects" id="projects" aria-labelledby="projects-title">
-      <header class="projects-intro"><p class="overline">04 / SELECTED SYSTEMS</p><h2 id="projects-title" data-es="Software real. Presentado con contexto." data-en="Real software. Presented with context.">Software real.<br>Presentado con contexto.</h2><p data-es="Las interfaces de sistemas privados son recreaciones conceptuales con datos sintéticos." data-en="Private-system interfaces are conceptual recreations using synthetic data.">Las interfaces de sistemas privados son recreaciones conceptuales con datos sintéticos.</p></header>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#work" data-magnetic="0.22" data-cursor="Explorar ↓" data-cursor-en="Explore ↓">
+                <span data-es="Ver proyectos ↓" data-en="View projects ↓">Ver proyectos ↓</span>
+              </a>
+              <button class="btn btn-secondary" type="button" data-copy-email data-magnetic="0.18" data-cursor="Copiar" data-cursor-en="Copy">
+                <span data-es="Copiar email" data-en="Copy email">Copiar email</span>
+              </button>
+              <a class="btn btn-secondary" href="https://github.com/alexlemos2217" target="_blank" rel="noopener noreferrer" data-magnetic="0.16" data-cursor="Explorar ↗" data-cursor-en="Explore ↗">
+                <span>GitHub ↗</span>
+              </a>
+              <a class="btn btn-secondary" href="https://www.linkedin.com/in/alexlemos22" target="_blank" rel="noopener noreferrer" data-magnetic="0.16" data-cursor="Explorar ↗" data-cursor-en="Explore ↗">
+                <span>LinkedIn ↗</span>
+              </a>
+            </div>
+          </div>
 
-      <article class="product regcrim" data-product="regcrim">
-        <div class="product-stage"><div class="product-index">01 / PRIVATE SYSTEM</div><div class="product-copy"><h3>REGCRIM</h3><p data-es="Registro, consulta y análisis de información estructurada." data-en="Capture, search and analysis of structured information.">Registro, consulta y análisis de información estructurada.</p><div>PHP · MariaDB · JavaScript · SQL</div></div>
-          <div class="reg-interface"><header><span><i></i> REGCRIM / CONTROL</span><b>SYNTHETIC VIEW</b></header><aside><i></i><i></i><i></i><i></i></aside><main><div class="reg-heading"><span>OVERVIEW / 01</span><b data-es="Situación general" data-en="General overview">Situación general</b></div><div class="reg-grid"><div class="reg-map"><i></i><i></i><i></i><i></i></div><div class="reg-bars"><i></i><i></i><i></i><i></i><i></i></div><div class="reg-list"><i></i><i></i><i></i><i></i></div></div></main></div>
-          <button class="project-detail" data-detail="regcrim" type="button"><span data-es="Contexto" data-en="Context">Contexto</span><i>↗</i></button>
+          <figure class="portrait-card" data-tilt="3.4">
+            <div class="portrait-media">
+              <img
+                src="assets/img/alex.jpg"
+                alt="Retrato de Alexander Lemos"
+                data-alt-es="Retrato de Alexander Lemos"
+                data-alt-en="Portrait of Alexander Lemos"
+                width="460"
+                height="460"
+                decoding="async"
+              >
+              <figcaption class="portrait-overlay">
+                <div class="portrait-meta">
+                  <strong>Alexander Lemos</strong>
+                  <span>Backend · APIs · SQL</span>
+                </div>
+                <span class="portrait-coords">34.90°S 56.16°W</span>
+              </figcaption>
+            </div>
+          </figure>
         </div>
-      </article>
 
-      <article class="product daw" data-product="daw"><div class="product-stage"><div class="product-index" data-es="02 / SISTEMA INSTITUCIONAL PRIVADO" data-en="02 / PRIVATE INSTITUTIONAL SYSTEM">02 / SISTEMA INSTITUCIONAL PRIVADO</div><div class="product-copy"><h3>DAW</h3><p data-es="Plataforma de software orientada a la gestión, consulta y organización de información." data-en="Software platform focused on managing, searching and organizing information.">Plataforma de software orientada a la gestión, consulta y organización de información.</p><div data-es="SISTEMA DE INFORMACIÓN · TECNOLOGÍAS NO PUBLICADAS" data-en="INFORMATION SYSTEM · TECHNOLOGIES NOT DISCLOSED">SISTEMA DE INFORMACIÓN · TECNOLOGÍAS NO PUBLICADAS</div></div>
-        <div class="daw-interface" aria-label="Interfaz conceptual de DAW con datos ficticios" data-aria-es="Interfaz conceptual de DAW con datos ficticios" data-aria-en="Conceptual DAW interface with synthetic data"><header><b>DAW / INFORMATION SYSTEM</b><span>SYNTHETIC DATA · PRIVATE</span></header><div class="daw-shell"><nav><strong>DAW</strong><i></i><i></i><i></i><i></i></nav><main><div class="daw-toolbar"><span data-es="CONSULTA GENERAL" data-en="GENERAL SEARCH">CONSULTA GENERAL</span><b>⌕</b></div><div class="daw-panels"><section class="daw-primary"><small data-es="INFORMACIÓN ORGANIZADA" data-en="ORGANIZED INFORMATION">INFORMACIÓN ORGANIZADA</small><strong data-es="Vista general" data-en="Overview">Vista general</strong><div><i></i><i></i><i></i><i></i></div></section><section class="daw-metric"><small data-es="REGISTROS" data-en="RECORDS">REGISTROS</small><b>—</b><span data-es="DATOS FICTICIOS" data-en="SYNTHETIC DATA">DATOS FICTICIOS</span></section><section class="daw-list"><i></i><i></i><i></i><i></i></section></div></main></div></div>
-        <button class="project-detail" data-detail="daw" type="button"><span data-es="Descripción técnica" data-en="Technical description">Descripción técnica</span><i>↗</i></button></div>
-      </article>
-
-      <article class="product secretaria" data-product="secretaria"><div class="product-stage"><div class="product-index">03 / OPERATIONS</div><div class="product-copy"><h3 data-es="SECRETARÍA" data-en="SECRETARIAT">SECRETARÍA</h3><p data-es="Procesos administrativos centralizados para ordenar la operación." data-en="Centralized administrative processes to bring order to operations.">Procesos administrativos centralizados para ordenar la operación.</p><div>PHP · MySQL · JavaScript · HTML · CSS</div></div>
-        <div class="ops-interface"><nav><b>COORD</b><i></i><span>01</span><span>02</span><span>03</span></nav><main><header><small>OPERATIONS / TODAY</small><b data-es="Panel operativo" data-en="Operations board">Panel operativo</b></header><div class="ops-numbers"><span><b>12</b><i>ACTIVE</i></span><span><b>04</b><i>PENDING</i></span><span><b>08</b><i>READY</i></span></div><div class="ops-flow"><i></i><i></i><i></i><i></i></div></main></div>
-        <button class="project-detail" data-detail="secretaria" type="button"><span data-es="Contexto" data-en="Context">Contexto</span><i>↗</i></button></div>
-      </article>
-
-      <article class="product rumbo-project" data-product="rumbo"><div class="product-stage"><div class="product-index" data-es="04 / APLICACIÓN WEB · EN DESARROLLO" data-en="04 / WEB APPLICATION · IN DEVELOPMENT">04 / APLICACIÓN WEB · EN DESARROLLO</div><div class="product-copy"><h3>RUMBO</h3><p data-es="Plataforma digital para descubrir destinos, lugares y experiencias en Uruguay." data-en="A digital platform for discovering destinations, places and experiences across Uruguay.">Plataforma digital para descubrir destinos, lugares y experiencias en Uruguay.</p><div>MAPLIBRE GL JS · OPENSTREETMAP · PROTOTIPO VISUAL</div></div>
-        <div class="rumbo-showcase" aria-label="Dirección visual conceptual de Rumbo" data-aria-es="Dirección visual conceptual de Rumbo" data-aria-en="Conceptual visual direction for Rumbo"><figure class="rumbo-hero-image"><img src="img/rumbo-costa-premium.jpg" alt="Paisaje conceptual de la costa uruguaya"><figcaption><span>COAST / URUGUAY</span><b data-es="DESCUBRÍ OTRO RUMBO" data-en="DISCOVER ANOTHER ROUTE">DESCUBRÍ OTRO RUMBO</b></figcaption></figure><div class="rumbo-thumbnails"><img src="img/rumbo-sierras-premium.jpg" alt="Paisaje conceptual de sierras uruguayas"><img src="img/rumbo-montevideo-premium.jpg" alt="Paisaje conceptual de Montevideo"></div><span class="rumbo-status" data-es="EN DESARROLLO" data-en="IN DEVELOPMENT">EN DESARROLLO</span></div>
-        <button class="project-detail rumbo-detail-open" type="button" aria-haspopup="dialog"><span data-es="Ver caso" data-en="View case study">Ver caso</span><i>↗</i></button></div>
-      </article>
-
-      <article class="product nexus" data-product="nexus"><div class="product-stage"><div class="product-index">05 / EDITORIAL · IN DEVELOPMENT</div><div class="product-copy"><h3>NEXUS</h3><p data-es="Tecnología, gaming, hardware y anime en un sistema editorial propio." data-en="Technology, gaming, hardware and anime in a distinct editorial system.">Tecnología, gaming, hardware y anime en un sistema editorial propio.</p><div>Editorial system · Technology · Culture</div></div>
-        <div class="nexus-interface"><header><b>NEXUS/</b><span>TECH　GAMING　CULTURE</span></header><main><div class="nexus-issue"><small>ISSUE / 001</small><strong>THE<br>NEW<br>MACHINE<br>AGE</strong></div><div class="nexus-sphere"></div><div class="nexus-tile one">HARDWARE <b>01</b></div><div class="nexus-tile two">PLAY <b>02</b></div></main></div>
-        <button class="project-detail" data-detail="nexus" type="button"><span data-es="Contexto" data-en="Context">Contexto</span><i>↗</i></button></div>
-      </article>
-
-      <section class="archive" aria-labelledby="archive-title"><div><p class="overline">05 / MORE WORK</p><h2 id="archive-title" data-es="Otros sistemas y experimentos." data-en="Other systems and experiments.">Otros sistemas<br>y experimentos.</h2></div><div class="archive-list"><div><span>01</span><h3>Hogwarts Institute Campus</h3><p data-es="Plataforma educativa." data-en="Educational platform.">Plataforma educativa.</p><b>PRIVATE</b></div><div><span>02</span><h3>PADO Gestión</h3><p data-es="Sistema de gestión." data-en="Management system.">Sistema de gestión.</p><b>PRIVATE</b></div><a href="https://github.com/alexlemos2217/pixel-rush" target="_blank" rel="noopener noreferrer"><span>03</span><h3>Pixel Rush</h3><p>JavaScript · Canvas 2D</p><b>GITHUB ↗</b></a><a href="https://github.com/alexlemos2217/faro-09" target="_blank" rel="noopener noreferrer"><span>04</span><h3>FARO:09</h3><p>Narrative web</p><b>GITHUB ↗</b></a><a href="https://pokedexalex.netlify.app/" target="_blank" rel="noopener noreferrer"><span>05</span><h3>Pokédex</h3><p>Public API · JavaScript</p><b>LIVE ↗</b></a></div></section>
+        <!-- Live NOW Block -->
+        <aside class="now-card" aria-label="Estado actual" data-aria-es="Estado actual" data-aria-en="Current status">
+          <div class="now-pill">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span>NOW</span>
+          </div>
+          <div class="now-copy">
+            <span>
+              <strong data-es="Licenciatura en Sistemas (ORT)" data-en="B.S. Information Systems (ORT)">Licenciatura en Sistemas (ORT)</strong>
+              <span class="now-sep">·</span>
+              <span data-es="Construyendo APIs REST en C# / .NET y sistemas escalables" data-en="Building REST APIs in C# / .NET and scalable systems">Construyendo APIs REST en C# / .NET y sistemas escalables</span>
+            </span>
+          </div>
+          <div class="now-location">
+            <span>Montevideo, UY</span>
+            <span class="now-clock" id="uyt-clock">--:--:-- UYT</span>
+          </div>
+        </aside>
+      </div>
     </section>
 
-    <section class="trajectory" id="trajectory" aria-labelledby="trajectory-title"><div class="trajectory-title"><p class="overline">06 / TRAJECTORY</p><h2 id="trajectory-title" data-es="Aprender es parte del trabajo." data-en="Learning is part of the work.">Aprender es parte<br>del trabajo.</h2></div><div class="trajectory-list"><article><time>2023 — <span data-es="ACTUALIDAD" data-en="PRESENT">ACTUALIDAD</span></time><h3>Universidad ORT Uruguay</h3><p data-es="Licenciatura en Sistemas." data-en="Bachelor’s degree in Information Systems.">Licenciatura en Sistemas.</p></article><article><time>FOUNDATION</time><h3>Instituto BIOS</h3><p data-es="Formación técnica en desarrollo de software." data-en="Technical education in software development.">Formación técnica en desarrollo de software.</p></article></div><div class="stack-line" aria-label="Tecnologías"><span>C# / .NET</span><span>PHP</span><span>JavaScript</span><span>SQL</span><span>MySQL / MariaDB</span><span>Java / Spring Boot</span><span>HTML / CSS</span><span>Git</span></div></section>
+    <!-- 02 · SHOWCASE DE PROYECTOS — TARJETAS DE ARTE A GRAN ESCALA -->
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="eyebrow" data-scramble data-es="01 · Trabajo seleccionado" data-en="01 · Selected Work">01 · Trabajo seleccionado</p>
+            <h2 class="section-title" id="work-title" data-es="Sistemas diseñados para resistir." data-en="Systems engineered to hold up.">Sistemas diseñados para resistir.</h2>
+            <p class="section-subtitle" data-es="Cada tarjeta resume la arquitectura y las decisiones técnicas. Hacé clic en cualquier proyecto para abrir su Case Study completo." data-en="Each showcase highlights architecture and engineering decisions. Click any project to inspect its full Tech Lead case study.">Cada tarjeta resume la arquitectura y las decisiones técnicas. Hacé clic en cualquier proyecto para abrir su Case Study completo.</p>
+          </div>
+        </div>
 
-    <section class="contact" id="contact" aria-labelledby="contact-title"><div class="contact-head"><p class="overline">07 / CONTACT</p><span>MONTEVIDEO · URUGUAY</span></div><h2 id="contact-title"><span data-es="HABLEMOS DE" data-en="LET'S TALK ABOUT">HABLEMOS DE</span><br><i data-es="LO QUE TIENE QUE FUNCIONAR." data-en="WHAT NEEDS TO WORK.">LO QUE TIENE QUE FUNCIONAR.</i></h2><p data-es="Estoy abierto a oportunidades para construir software útil, claro y bien resuelto." data-en="I’m open to opportunities to build useful, clear and well-resolved software.">Estoy abierto a oportunidades para construir software útil, claro y bien resuelto.</p><div class="contact-links"><a href="mailto:alexlemos2297@gmail.com">alexlemos2297@gmail.com <i>↗</i></a><a href="https://www.linkedin.com/in/alexlemos22" target="_blank" rel="noopener noreferrer">LinkedIn <i>↗</i></a><a href="https://github.com/alexlemos2217" target="_blank" rel="noopener noreferrer">GitHub <i>↗</i></a></div></section>
+        <div class="showcase-stack">
+          <!-- Project 01: BIOS Work -->
+          <article
+            class="project-card"
+            data-case="bios-work"
+            data-accent="emerald"
+            data-theme-section="bios-work"
+            data-nav-key="work"
+            data-tilt="2.6"
+            data-reveal
+            tabindex="0"
+            role="button"
+            data-cursor="Ver caso"
+            data-cursor-en="View case"
+          >
+            <div class="project-body">
+              <div>
+                <div class="project-meta-row">
+                  <span class="project-num">01 / BACKEND &amp; RBAC</span>
+                  <span class="project-pill">Java · Spring Boot</span>
+                </div>
+                <h3 class="project-title">BIOS Work</h3>
+                <p class="project-summary" data-es="Backend de gestión laboral y operativa con autenticación centralizada, autorización granular basada en roles (RBAC) y persistencia relacional en SQL." data-en="Work and operations management backend featuring centralized authentication, granular role-based access control (RBAC) and relational SQL persistence.">Backend de gestión laboral y operativa con autenticación centralizada, autorización granular basada en roles (RBAC) y persistencia relacional en SQL.</p>
+                <ul class="project-highlights">
+                  <li data-es="Spring Security FilterChain con validación de roles y permisos" data-en="Spring Security FilterChain with role and permission guards">Spring Security FilterChain con validación de roles y permisos</li>
+                  <li data-es="Arquitectura en capas (Controller → Service → Repository)" data-en="Layered architecture (Controller → Service → Repository)">Arquitectura en capas (Controller → Service → Repository)</li>
+                  <li data-es="Esquema SQL normalizado con integridad referencial" data-en="Normalized SQL schema enforcing referential integrity">Esquema SQL normalizado con integridad referencial</li>
+                </ul>
+              </div>
+
+              <div class="project-foot">
+                <div class="project-tags">
+                  <span>Java</span>
+                  <span>Spring Boot</span>
+                  <span>Spring Security</span>
+                  <span>SQL</span>
+                </div>
+                <span class="project-cta">
+                  <span data-es="Abrir Case Study" data-en="Open Case Study">Abrir Case Study</span>
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Interactive Artifact: Auth & RBAC Permission Matrix -->
+            <div class="project-stage">
+              <div class="rbac-artifact" data-stop-card data-parallax="10">
+                <div class="rbac-top">
+                  <span>SpringSecurity :: FilterChain</span>
+                  <span class="rbac-token-badge" id="rbac-token" data-parallax="18">jwt:rs256 · scope:all</span>
+                </div>
+
+                <div class="rbac-roles" role="group" aria-label="Simular rol RBAC" data-aria-es="Simular rol RBAC" data-aria-en="Simulate RBAC role">
+                  <button class="rbac-role-btn is-active" type="button" data-rbac-role="ADMIN" aria-pressed="true" data-cursor="Probar" data-cursor-en="Test">ROLE_ADMIN</button>
+                  <button class="rbac-role-btn" type="button" data-rbac-role="STAFF" aria-pressed="false" data-cursor="Probar" data-cursor-en="Test">ROLE_STAFF</button>
+                  <button class="rbac-role-btn" type="button" data-rbac-role="USER" aria-pressed="false" data-cursor="Probar" data-cursor-en="Test">ROLE_USER</button>
+                </div>
+
+                <div class="rbac-pipe" aria-hidden="true" data-parallax="16">
+                  <div class="rbac-node">
+                    <strong>Auth Guard</strong>
+                    <small>Principal + Claims</small>
+                  </div>
+                  <div class="rbac-beam"></div>
+                  <div class="rbac-node">
+                    <strong>SQL Repo</strong>
+                    <small>Transactional</small>
+                  </div>
+                </div>
+
+                <div class="rbac-rules" id="rbac-rules"></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 02: BIOS Fitness -->
+          <article
+            class="project-card"
+            data-case="bios-fitness"
+            data-accent="electric"
+            data-theme-section="bios-fitness"
+            data-nav-key="work"
+            data-tilt="2.6"
+            data-reveal
+            tabindex="0"
+            role="button"
+            data-cursor="Ver caso"
+            data-cursor-en="View case"
+          >
+            <div class="project-body">
+              <div>
+                <div class="project-meta-row">
+                  <span class="project-num">02 / MOBILE OFFLINE-FIRST</span>
+                  <span class="project-pill">Flutter · BLoC</span>
+                </div>
+                <h3 class="project-title">BIOS Fitness</h3>
+                <p class="project-summary" data-es="Aplicación móvil para planificar entrenamientos, comidas y rutinas diarias con persistencia local en SQLite y flujo reactivo unidireccional mediante patrón BLoC." data-en="Mobile application for workouts, nutrition plans and daily routines built with local SQLite persistence and unidirectional reactive state via BLoC.">Aplicación móvil para planificar entrenamientos, comidas y rutinas diarias con persistencia local en SQLite y flujo reactivo unidireccional mediante patrón BLoC.</p>
+                <ul class="project-highlights">
+                  <li data-es="Separación total UI ↔ Lógica de estado con patrón BLoC" data-en="Strict UI ↔ Business state separation via BLoC pattern">Separación total UI ↔ Lógica de estado con patrón BLoC</li>
+                  <li data-es="Persistencia local 100% offline sobre SQLite" data-en="100% offline local persistence powered by SQLite">Persistencia local 100% offline sobre SQLite</li>
+                  <li data-es="Métricas diarias y seguimiento semanal de adherencia" data-en="Daily goal telemetry and weekly adherence tracking">Métricas diarias y seguimiento semanal de adherencia</li>
+                </ul>
+              </div>
+
+              <div class="project-foot">
+                <div class="project-tags">
+                  <span>Flutter</span>
+                  <span>Dart</span>
+                  <span>BLoC</span>
+                  <span>SQLite</span>
+                </div>
+                <span class="project-cta">
+                  <span data-es="Abrir Case Study" data-en="Open Case Study">Abrir Case Study</span>
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Interactive Artifact: Floating Tactile Mobile Mockup -->
+            <div class="project-stage" aria-hidden="true">
+              <div class="fitness-phone" data-parallax="12">
+                <div class="fitness-screen">
+                  <div class="phone-island"></div>
+                  <div class="fitness-head">
+                    <strong>BIOS Fitness</strong>
+                    <span class="fitness-bloc-pill">BLoC · Synced</span>
+                  </div>
+                  <div class="fitness-ring-row" data-parallax="18">
+                    <svg class="fitness-ring" viewBox="0 0 64 64">
+                      <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+                      <circle class="ring-fill" cx="32" cy="32" r="26"></circle>
+                    </svg>
+                    <div class="fitness-ring-meta">
+                      <strong>84%</strong>
+                      <span data-es="Objetivo diario" data-en="Daily goal">Objetivo diario</span>
+                    </div>
+                  </div>
+                  <div class="fitness-bars" data-parallax="14">
+                    <i style="--h:42%"></i>
+                    <i style="--h:58%"></i>
+                    <i style="--h:48%"></i>
+                    <i style="--h:76%"></i>
+                    <i style="--h:64%"></i>
+                    <i style="--h:68%"></i>
+                    <i style="--h:54%"></i>
+                  </div>
+                  <div class="fitness-foot">
+                    <span>SQLite Local</span>
+                    <span>4 / 5 sessions</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 03: Operational & Data Management Systems -->
+          <article
+            class="project-card"
+            data-case="ops-systems"
+            data-accent="violet"
+            data-theme-section="ops-systems"
+            data-nav-key="work"
+            data-tilt="2.6"
+            data-reveal
+            tabindex="0"
+            role="button"
+            data-cursor="Ver caso"
+            data-cursor-en="View case"
+          >
+            <div class="project-body">
+              <div>
+                <div class="project-meta-row">
+                  <span class="project-num">03 / DATA &amp; OPERATIONS</span>
+                  <span class="project-pill" data-es="Privado · NDA" data-en="Private · NDA">Privado · NDA</span>
+                </div>
+                <h3 class="project-title" data-es="Sistemas de Gestión Operativa &amp; Datos" data-en="Operational &amp; Data Management Systems">Sistemas de Gestión Operativa &amp; Datos</h3>
+                <p class="project-summary" data-es="Plataformas internas en producción (REGCRIM, Secretaría, PADO Gestión) diseñadas para centralizar registros estructurados, permisos por perfil, auditoría y consultas SQL multicriterio." data-en="Internal production platforms (REGCRIM, Secretariat, PADO Gestión) engineered to centralize structured records, role permissions, audit trails and multi-criteria SQL reporting.">Plataformas internas en producción (REGCRIM, Secretaría, PADO Gestión) diseñadas para centralizar registros estructurados, permisos por perfil, auditoría y consultas SQL multicriterio.</p>
+                <ul class="project-highlights">
+                  <li data-es="Consultas preparadas en PHP y prevención de SQL Injection" data-en="Prepared PHP statements and SQL injection protection">Consultas preparadas en PHP y prevención de SQL Injection</li>
+                  <li data-es="Índices compuestos en MariaDB/MySQL para búsquedas rápidas" data-en="Composite MariaDB/MySQL indexes for fast multi-filter search">Índices compuestos en MariaDB/MySQL para búsquedas rápidas</li>
+                  <li data-es="Control de acceso por rol, auditoría y reportes exportables" data-en="Role-based access, audit trails and exportable reporting">Control de acceso por rol, auditoría y reportes exportables</li>
+                </ul>
+              </div>
+
+              <div class="project-foot">
+                <div class="project-tags">
+                  <span>PHP</span>
+                  <span>SQL</span>
+                  <span>MariaDB</span>
+                  <span>MySQL</span>
+                  <span>JavaScript</span>
+                </div>
+                <span class="project-cta">
+                  <span data-es="Ver arquitectura" data-en="View architecture">Ver arquitectura</span>
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Interactive Artifact: Layered Architecture & SQL Query Engine -->
+            <div class="project-stage" aria-hidden="true">
+              <div class="layers-artifact">
+                <div class="layer-stack" data-parallax="10">
+                  <div class="layer-node" style="--i:0">
+                    <span class="layer-dot"></span>
+                    <div>
+                      <strong>Presentation Layer</strong>
+                      <small>Operational views &amp; multi-filter search</small>
+                    </div>
+                    <span class="layer-tag">UI</span>
+                  </div>
+                  <div class="layer-node" style="--i:1">
+                    <span class="layer-dot"></span>
+                    <div>
+                      <strong>Domain &amp; Access Control</strong>
+                      <small>RBAC sessions · Input validation · Audit</small>
+                    </div>
+                    <span class="layer-tag">PHP</span>
+                  </div>
+                  <div class="layer-node" style="--i:2">
+                    <span class="layer-dot"></span>
+                    <div>
+                      <strong>Relational Data Engine</strong>
+                      <small>Prepared statements · Indexed joins</small>
+                    </div>
+                    <span class="layer-tag">MariaDB</span>
+                  </div>
+                </div>
+
+                <div class="sql-preview" data-parallax="20">
+                  <div class="sql-preview-head">
+                    <span>query_plan :: idx_records_unit_date</span>
+                    <span>4.1ms · NDA SAFE</span>
+                  </div>
+                  <div><span class="sql-kw">SELECT</span> r.code, u.name, <span class="sql-fn">COUNT</span>(e.id)</div>
+                  <div><span class="sql-kw">FROM</span> records r <span class="sql-kw">JOIN</span> units u <span class="sql-kw">ON</span> u.id = r.unit_id</div>
+                  <div><span class="sql-kw">WHERE</span> r.status = ? <span class="sql-kw">GROUP BY</span> u.id;</div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 04 · Interactive Archive -->
+        <div class="archive-block" data-reveal>
+          <div class="archive-head">
+            <div>
+              <p class="eyebrow" data-scramble data-es="04 · Más trabajo &amp; Archive" data-en="04 · More Work &amp; Archive">04 · Más trabajo &amp; Archive</p>
+              <h3 data-es="Otros sistemas, demos y próximos repos." data-en="Other systems, live demos &amp; upcoming repos.">Otros sistemas, demos y próximos repos.</h3>
+            </div>
+            <p data-es="Pasá el cursor para previsualizar. Clic para ver detalles o abrir el repo." data-en="Hover to preview. Click to inspect details or open the repo.">Pasá el cursor para previsualizar. Clic para ver detalles o abrir el repo.</p>
+          </div>
+
+          <div class="archive-list">
+            <button class="archive-row" type="button" data-case="hogwarts-campus" data-preview="hogwarts-campus" data-cursor="Ver caso" data-cursor-en="View case">
+              <span class="archive-idx">01</span>
+              <span class="archive-name" data-scramble>Hogwarts Institute Campus</span>
+              <span class="archive-stack">JavaScript · Supabase · SQL</span>
+              <span class="archive-badge" data-es="Privado" data-en="Private">Privado</span>
+            </button>
+
+            <button class="archive-row" type="button" data-case="airport-system" data-preview="airport-system" data-cursor="Ver caso" data-cursor-en="View case">
+              <span class="archive-idx">02</span>
+              <span class="archive-name" data-scramble data-es="Gestión Aeroportuaria" data-en="Airport Operations System">Gestión Aeroportuaria</span>
+              <span class="archive-stack">C# · ASP.NET · SQL Server</span>
+              <span class="archive-badge" data-es="Académico" data-en="Academic">Académico</span>
+            </button>
+
+            <button class="archive-row" type="button" data-case="rumbo" data-preview="rumbo" data-cursor="Ver caso" data-cursor-en="View case">
+              <span class="archive-idx">03</span>
+              <span class="archive-name" data-scramble>Rumbo</span>
+              <span class="archive-stack">JavaScript · OpenStreetMap · Web App</span>
+              <span class="archive-badge" data-es="En desarrollo" data-en="In dev">En desarrollo</span>
+            </button>
+
+            <a class="archive-row" href="https://github.com/alexlemos2217/pixel-rush" target="_blank" rel="noopener noreferrer" data-preview="pixel-rush" data-cursor="Explorar ↗" data-cursor-en="Explore ↗">
+              <span class="archive-idx">04</span>
+              <span class="archive-name" data-scramble>Pixel Rush</span>
+              <span class="archive-stack">JavaScript · Canvas 2D</span>
+              <span class="archive-badge">GitHub ↗</span>
+            </a>
+
+            <a class="archive-row" href="https://github.com/alexlemos2217/faro-09" target="_blank" rel="noopener noreferrer" data-preview="faro-09" data-cursor="Explorar ↗" data-cursor-en="Explore ↗">
+              <span class="archive-idx">05</span>
+              <span class="archive-name" data-scramble>FARO:09</span>
+              <span class="archive-stack">HTML5 · CSS3 · Narrative Web</span>
+              <span class="archive-badge">GitHub ↗</span>
+            </a>
+
+            <a class="archive-row" href="https://pokedexalex.netlify.app/" target="_blank" rel="noopener noreferrer" data-preview="pokedex" data-cursor="Explorar ↗" data-cursor-en="Explore ↗">
+              <span class="archive-idx">06</span>
+              <span class="archive-name" data-scramble>Pokédex</span>
+              <span class="archive-stack">Public REST API · JavaScript</span>
+              <span class="archive-badge" data-es="Demo ↗" data-en="Live ↗">Demo ↗</span>
+            </a>
+
+            <button class="archive-row archive-row--upcoming" type="button" data-case="dotnet-api-next" data-preview="dotnet-api-next" data-cursor="Ver plan" data-cursor-en="View plan">
+              <span class="archive-idx">07</span>
+              <span class="archive-name" data-scramble>Clean Architecture .NET 8 Web API</span>
+              <span class="archive-stack">C# · .NET · EF Core · SQL Server · Docker</span>
+              <span class="archive-badge" data-es="Próximamente" data-en="Coming soon">Próximamente</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · SYSTEMS LAB — INTERACTIVE BACKEND SANDBOX -->
+    <section class="section" id="lab" data-theme-section="lab" data-nav-key="lab" aria-labelledby="lab-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="eyebrow" data-scramble data-es="02 · Systems Lab" data-en="02 · Systems Lab">02 · Systems Lab</p>
+            <h2 class="section-title" id="lab-title" data-es="Probá la ingeniería en vivo." data-en="Test the engineering live.">Probá la ingeniería en vivo.</h2>
+            <p class="section-subtitle" data-es="Dos artefactos interactivos para explorar mi perfil como API REST y trazar un flujo backend completo desde el cliente hasta SQL." data-en="Two interactive sandboxes to query my profile as a REST API and trace a complete backend request lifecycle down to SQL.">Dos artefactos interactivos para explorar mi perfil como API REST y trazar un flujo backend completo desde el cliente hasta SQL.</p>
+          </div>
+        </div>
+
+        <div class="lab-grid">
+          <!-- Lab 1: Live API Playground -->
+          <div class="lab-panel" data-reveal>
+            <div class="lab-topbar">
+              <div class="lab-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+              <span class="lab-title-bar">Live API Playground · api.alexlemos.dev</span>
+              <div class="lab-status-group">
+                <span class="http-status" id="api-status">200 OK</span>
+                <span class="http-latency" id="api-latency">1.4 ms</span>
+              </div>
+            </div>
+
+            <div class="lab-body">
+              <div class="api-endpoints" role="group" aria-label="Endpoints disponibles" data-aria-es="Endpoints disponibles" data-aria-en="Available endpoints">
+                <button class="endpoint-chip is-active" type="button" data-endpoint="/api/v1/alex" aria-pressed="true" data-cursor="Probar" data-cursor-en="Run">
+                  <span class="method">GET</span>/api/v1/alex
+                </button>
+                <button class="endpoint-chip" type="button" data-endpoint="/api/v1/stack" aria-pressed="false" data-cursor="Probar" data-cursor-en="Run">
+                  <span class="method">GET</span>/api/v1/stack
+                </button>
+                <button class="endpoint-chip" type="button" data-endpoint="/api/v1/projects" aria-pressed="false" data-cursor="Probar" data-cursor-en="Run">
+                  <span class="method">GET</span>/api/v1/projects
+                </button>
+                <button class="endpoint-chip" type="button" data-endpoint="/api/v1/contact" aria-pressed="false" data-cursor="Probar" data-cursor-en="Run">
+                  <span class="method">GET</span>/api/v1/contact
+                </button>
+              </div>
+
+              <pre class="api-console-output" id="api-output" aria-live="polite"></pre>
+
+              <form class="api-prompt" id="api-form" autocomplete="off">
+                <span class="api-prompt-caret" aria-hidden="true">&gt;</span>
+                <input
+                  id="api-input"
+                  type="text"
+                  placeholder="Escribí: help, stack, projects, contact..."
+                  data-placeholder-es="Escribí: help, stack, projects, contact..."
+                  data-placeholder-en="Type: help, stack, projects, contact..."
+                  aria-label="Comando de consola API"
+                  data-aria-es="Comando de consola API"
+                  data-aria-en="API console command"
+                >
+                <button class="api-run-btn" type="submit" data-cursor="Ejecutar" data-cursor-en="Run">Run</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Lab 2: Interactive Architecture Flow -->
+          <div class="lab-panel" data-reveal>
+            <div class="lab-topbar">
+              <div class="lab-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+              <span class="lab-title-bar">Interactive Architecture Flow</span>
+              <span class="http-status" id="arch-status">READY · TLS 1.3</span>
+            </div>
+
+            <div class="lab-body">
+              <div class="arch-controls">
+                <div class="arch-scenarios" role="group" aria-label="Escenarios de simulación" data-aria-es="Escenarios de simulación" data-aria-en="Simulation scenarios">
+                  <button class="scenario-btn is-active" type="button" data-scenario="miss" aria-pressed="true" data-cursor="Simular" data-cursor-en="Simulate">200 OK (Cache Miss)</button>
+                  <button class="scenario-btn" type="button" data-scenario="hit" aria-pressed="false" data-cursor="Simular" data-cursor-en="Simulate">200 OK (Cache Hit)</button>
+                  <button class="scenario-btn" type="button" data-scenario="unauth" aria-pressed="false" data-cursor="Simular" data-cursor-en="Simulate">401 Unauthorized</button>
+                </div>
+
+                <button class="btn btn-accent" id="arch-simulate" type="button" data-magnetic="0.18" data-cursor="Probar" data-cursor-en="Simulate">
+                  <span data-es="Simular Request ▶" data-en="Simulate Request ▶">Simular Request ▶</span>
+                </button>
+              </div>
+
+              <div class="arch-canvas-wrap">
+                <svg class="arch-svg" viewBox="0 0 550 148" role="img" aria-label="Diagrama Client, Auth y Cache, .NET o Spring y SQL Server" data-aria-es="Diagrama Client, Auth y Cache, .NET o Spring y SQL Server" data-aria-en="Diagram showing Client, Auth and Cache, .NET or Spring and SQL Server">
+                  <line class="arch-edge" x1="115" y1="74" x2="155" y2="74"></line>
+                  <line class="arch-edge" x1="255" y1="74" x2="295" y2="74"></line>
+                  <line class="arch-edge" x1="395" y1="74" x2="435" y2="74"></line>
+
+                  <g class="arch-node" data-node="0">
+                    <rect x="15" y="42" width="100" height="64" rx="12"></rect>
+                    <text class="arch-node-title" x="65" y="69" text-anchor="middle">Client</text>
+                    <text class="arch-node-sub" x="65" y="87" text-anchor="middle">HTTPS / Req</text>
+                  </g>
+
+                  <g class="arch-node" data-node="1">
+                    <rect x="155" y="42" width="100" height="64" rx="12"></rect>
+                    <text class="arch-node-title" x="205" y="69" text-anchor="middle">Auth &amp; Cache</text>
+                    <text class="arch-node-sub" x="205" y="87" text-anchor="middle">JWT · Redis</text>
+                  </g>
+
+                  <g class="arch-node" data-node="2">
+                    <rect x="295" y="42" width="100" height="64" rx="12"></rect>
+                    <text class="arch-node-title" x="345" y="69" text-anchor="middle">.NET / Spring</text>
+                    <text class="arch-node-sub" x="345" y="87" text-anchor="middle">API Service</text>
+                  </g>
+
+                  <g class="arch-node" data-node="3">
+                    <rect x="435" y="42" width="100" height="64" rx="12"></rect>
+                    <text class="arch-node-title" x="485" y="69" text-anchor="middle">SQL Server</text>
+                    <text class="arch-node-sub" x="485" y="87" text-anchor="middle">MariaDB · SQL</text>
+                  </g>
+
+                  <circle class="arch-packet" id="arch-packet" cx="65" cy="74" r="6"></circle>
+                </svg>
+              </div>
+
+              <ol class="arch-trace" id="arch-trace" aria-live="polite"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · STACK TÉCNICO AGRUPADO Y FILTRABLE -->
+    <section class="section" id="stack" data-theme-section="hero" aria-labelledby="stack-title">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="eyebrow" data-scramble data-es="03 · Stack técnico" data-en="03 · Technical Stack">03 · Stack técnico</p>
+            <h2 class="section-title" id="stack-title" data-es="Herramientas al servicio del problema." data-en="Tools in service of the problem.">Herramientas al servicio del problema.</h2>
+          </div>
+        </div>
+
+        <div class="stack-filters" role="group" aria-label="Filtrar categorías del stack" data-aria-es="Filtrar categorías del stack" data-aria-en="Filter stack categories" data-reveal>
+          <button class="filter-btn is-active" type="button" data-stack-filter="all" aria-pressed="true" data-es="Todo" data-en="All">Todo</button>
+          <button class="filter-btn" type="button" data-stack-filter="backend" aria-pressed="false">Backend</button>
+          <button class="filter-btn" type="button" data-stack-filter="databases" aria-pressed="false" data-es="Bases de Datos" data-en="Databases">Bases de Datos</button>
+          <button class="filter-btn" type="button" data-stack-filter="frontend" aria-pressed="false">Frontend / Mobile</button>
+          <button class="filter-btn" type="button" data-stack-filter="tools" aria-pressed="false" data-es="Herramientas" data-en="Tools">Herramientas</button>
+        </div>
+
+        <div class="stack-grid" data-reveal>
+          <div class="stack-group" data-stack-group="backend">
+            <div class="stack-group-head">
+              <h3>Backend</h3>
+              <span>01</span>
+            </div>
+            <div class="stack-chips">
+              <span>C# / .NET</span>
+              <span>ASP.NET Core</span>
+              <span>Java</span>
+              <span>Spring Boot</span>
+              <span>Spring Security</span>
+              <span>PHP</span>
+              <span>REST APIs</span>
+            </div>
+          </div>
+
+          <div class="stack-group" data-stack-group="databases">
+            <div class="stack-group-head">
+              <h3 data-es="Bases de Datos" data-en="Databases">Bases de Datos</h3>
+              <span>02</span>
+            </div>
+            <div class="stack-chips">
+              <span>SQL Server</span>
+              <span>MySQL</span>
+              <span>MariaDB</span>
+              <span>SQLite</span>
+              <span>Modelado SQL</span>
+              <span>Stored Procedures</span>
+            </div>
+          </div>
+
+          <div class="stack-group" data-stack-group="frontend">
+            <div class="stack-group-head">
+              <h3>Frontend &amp; Mobile</h3>
+              <span>03</span>
+            </div>
+            <div class="stack-chips">
+              <span>JavaScript (ES6+)</span>
+              <span>HTML5</span>
+              <span>CSS3</span>
+              <span>Flutter</span>
+              <span>Dart / BLoC</span>
+            </div>
+          </div>
+
+          <div class="stack-group" data-stack-group="tools">
+            <div class="stack-group-head">
+              <h3 data-es="Herramientas" data-en="Tools">Herramientas</h3>
+              <span>04</span>
+            </div>
+            <div class="stack-chips">
+              <span>Git</span>
+              <span>GitHub</span>
+              <span>Docker</span>
+              <span>Linux</span>
+              <span>Visual Studio</span>
+              <span>VS Code</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 · TRAYECTORIA & PERFIL -->
+    <section class="section" id="about" data-theme-section="hero" data-nav-key="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-layout">
+          <div class="about-manifesto" data-reveal>
+            <p class="eyebrow" data-scramble data-es="04 · Trayectoria" data-en="04 · Trajectory">04 · Trayectoria</p>
+            <h2 class="section-title" id="about-title" data-es="Primero el problema, después el código." data-en="First the problem, then the code.">Primero el problema, después el código.</h2>
+            <p data-es="Combino formación universitaria en Sistemas con experiencia práctica desarrollando software web orientado a gestión operativa, lógica de negocio y bases de datos relacionales." data-en="I combine university-level Information Systems training with hands-on experience building web software for operational workflows, business logic and relational databases.">Combino formación universitaria en Sistemas con experiencia práctica desarrollando software web orientado a gestión operativa, lógica de negocio y bases de datos relacionales.</p>
+            <p data-es="Me enfoco en escribir código mantenible, esquemas de datos limpios e interfaces claras que reduzcan fricción real en el trabajo diario." data-en="I focus on maintainable code, clean data schemas and crisp interfaces that remove real friction from everyday work.">Me enfoco en escribir código mantenible, esquemas de datos limpios e interfaces claras que reduzcan fricción real en el trabajo diario.</p>
+
+            <div class="about-stats">
+              <div class="stat-box">
+                <strong>Backend &amp; Full-Stack</strong>
+                <span data-es="Especialidad principal" data-en="Primary focus">Especialidad principal</span>
+              </div>
+              <div class="stat-box">
+                <strong>ES · PT · EN</strong>
+                <span data-es="Idiomas de trabajo" data-en="Working languages">Idiomas de trabajo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline" data-reveal>
+            <div class="timeline-track" aria-hidden="true">
+              <span class="timeline-fill"></span>
+            </div>
+
+            <article class="timeline-item">
+              <span class="timeline-node" aria-hidden="true"></span>
+              <span class="timeline-period" data-es="2023 — ACTUALIDAD" data-en="2023 — PRESENT">2023 — ACTUALIDAD</span>
+              <h3 data-es="Licenciatura en Sistemas" data-en="B.S. in Information Systems">Licenciatura en Sistemas</h3>
+              <p class="timeline-org">Universidad ORT Uruguay</p>
+              <p class="timeline-desc" data-es="Formación universitaria en ingeniería de software, arquitectura de sistemas, algoritmos, bases de datos y gestión de proyectos IT." data-en="University degree focused on software engineering, systems architecture, algorithms, databases and IT project management.">Formación universitaria en ingeniería de software, arquitectura de sistemas, algoritmos, bases de datos y gestión de proyectos IT.</p>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-node" aria-hidden="true"></span>
+              <span class="timeline-period" data-es="EXPERIENCIA PRÁCTICA" data-en="HANDS-ON EXPERIENCE">EXPERIENCIA PRÁCTICA</span>
+              <h3 data-es="Desarrollo de Sistemas Web &amp; Datos" data-en="Web &amp; Data Systems Development">Desarrollo de Sistemas Web &amp; Datos</h3>
+              <p class="timeline-org" data-es="Plataformas operativas y soluciones a medida" data-en="Operational platforms &amp; custom software">Plataformas operativas y soluciones a medida</p>
+              <p class="timeline-desc" data-es="Diseño e implementación de sistemas de gestión, control de roles, consultas SQL optimizadas y tableros operativos usando PHP, MariaDB/MySQL, JavaScript y ecosistema .NET." data-en="Design and delivery of management systems, role-based access, optimized SQL queries and operational dashboards using PHP, MariaDB/MySQL, JavaScript and the .NET ecosystem.">Diseño e implementación de sistemas de gestión, control de roles, consultas SQL optimizadas y tableros operativos usando PHP, MariaDB/MySQL, JavaScript y ecosistema .NET.</p>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-node" aria-hidden="true"></span>
+              <span class="timeline-period" data-es="FORMACIÓN TÉCNICA" data-en="TECHNICAL DEGREE">FORMACIÓN TÉCNICA</span>
+              <h3 data-es="Analista de Sistemas" data-en="Systems Analyst">Analista de Sistemas</h3>
+              <p class="timeline-org">Instituto BIOS</p>
+              <p class="timeline-desc" data-es="Desarrollo de aplicaciones backend, web y móviles con Java/Spring Boot, C#/.NET, Flutter/BLoC y bases de datos relacionales SQL." data-en="Backend, web and mobile software engineering with Java/Spring Boot, C#/.NET, Flutter/BLoC and relational SQL databases.">Desarrollo de aplicaciones backend, web y móviles con Java/Spring Boot, C#/.NET, Flutter/BLoC y bases de datos relacionales SQL.</p>
+            </article>
+
+            <article class="timeline-item">
+              <span class="timeline-node" aria-hidden="true"></span>
+              <span class="timeline-period" data-es="FORMACIÓN COMPLEMENTARIA" data-en="COMPLEMENTARY PROGRAM">FORMACIÓN COMPLEMENTARIA</span>
+              <h3>Jóvenes a Programar</h3>
+              <p class="timeline-org">Plan Ceibal</p>
+              <p class="timeline-desc" data-es="Fundamentos de programación, desarrollo web moderno y trabajo colaborativo con herramientas de la industria." data-en="Programming fundamentals, modern web development and collaborative workflows with industry tooling.">Fundamentos de programación, desarrollo web moderno y trabajo colaborativo con herramientas de la industria.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · CONTACTO -->
+    <section class="section" id="contact" data-theme-section="hero" data-nav-key="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-banner" data-reveal>
+          <div>
+            <p class="eyebrow" data-scramble data-es="05 · Contacto" data-en="05 · Contact">05 · Contacto</p>
+            <h2 id="contact-title" data-es="¿Buscás un desarrollador backend o full-stack para tu equipo?" data-en="Looking for a backend or full-stack developer for your team?">¿Buscás un desarrollador backend o full-stack para tu equipo?</h2>
+            <p data-es="Estoy abierto a oportunidades IT para aportar en APIs, arquitectura de datos y productos digitales con impacto real." data-en="I'm open to IT opportunities to contribute to APIs, data architecture and high-impact digital products.">Estoy abierto a oportunidades IT para aportar en APIs, arquitectura de datos y productos digitales con impacto real.</p>
+          </div>
+
+          <div class="contact-cta-group">
+            <a class="btn btn-primary" href="mailto:alexlemos2297@gmail.com" data-magnetic="0.2" data-cursor="Escribir ↗" data-cursor-en="Email ↗">
+              <span>alexlemos2297@gmail.com ↗</span>
+            </a>
+            <button class="btn btn-secondary" type="button" data-copy-email data-magnetic="0.18" data-cursor="Copiar" data-cursor-en="Copy">
+              <span data-es="Copiar email" data-en="Copy email">Copiar email</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer><span>© <b id="year">2026</b> ALEXANDER LEMOS</span><a href="#top" data-es="VOLVER ARRIBA ↑" data-en="BACK TO TOP ↑">VOLVER ARRIBA ↑</a></footer>
-  <dialog class="rumbo-case" aria-labelledby="rumbo-case-title"><button class="rumbo-case-close" type="button" aria-label="Cerrar">×</button><header><p>04 / CASE STUDY · IN DEVELOPMENT</p><h2 id="rumbo-case-title">RUMBO</h2><div><span data-es="APLICACIÓN WEB" data-en="WEB APPLICATION">APLICACIÓN WEB</span><span data-es="TURISMO DIGITAL" data-en="DIGITAL TOURISM">TURISMO DIGITAL</span><span data-es="EN DESARROLLO" data-en="IN DEVELOPMENT">EN DESARROLLO</span></div></header><figure class="rumbo-case-hero"><img src="img/rumbo-costa-premium.jpg" alt="Dirección visual conceptual inspirada en la costa de Uruguay"><figcaption data-es="Dirección visual conceptual. No es una captura del producto." data-en="Conceptual visual direction. This is not a product screenshot.">Dirección visual conceptual. No es una captura del producto.</figcaption></figure><div class="rumbo-case-body"><section><p class="overline" data-es="INTRODUCCIÓN" data-en="INTRODUCTION">INTRODUCCIÓN</p><h3 data-es="Uruguay como experiencia digital." data-en="Uruguay as a digital experience.">Uruguay como experiencia digital.</h3><p data-es="Rumbo se desarrolla como una plataforma para descubrir lugares, destinos y experiencias en Uruguay, reuniendo exploración geográfica e información útil para pensar recorridos." data-en="Rumbo is being developed as a platform for discovering places, destinations and experiences across Uruguay, bringing geographic exploration and useful route-planning information together.">Rumbo se desarrolla como una plataforma para descubrir lugares, destinos y experiencias en Uruguay, reuniendo exploración geográfica e información útil para pensar recorridos.</p></section><section><p class="overline" data-es="OBJETIVO" data-en="OBJECTIVE">OBJETIVO</p><h3 data-es="Descubrir antes de recorrer." data-en="Discover before travelling.">Descubrir antes de recorrer.</h3><p data-es="El objetivo es facilitar la exploración del país mediante una interfaz clara, visual y orientada al territorio." data-en="The goal is to make exploring the country easier through a clear, visual, territory-focused interface.">El objetivo es facilitar la exploración del país mediante una interfaz clara, visual y orientada al territorio.</p></section><section class="rumbo-capabilities"><p class="overline" data-es="CAPACIDADES" data-en="CAPABILITIES">CAPACIDADES</p><div><article><span data-es="CONCEPTO VERIFICABLE" data-en="VERIFIABLE CONCEPT">CONCEPTO VERIFICABLE</span><h4 data-es="Exploración" data-en="Exploration">Exploración</h4><p data-es="Dirección visual para destinos, playas y lugares de interés." data-en="Visual direction for destinations, beaches and points of interest.">Dirección visual para destinos, playas y lugares de interés.</p></article><article><span data-es="PROTOTIPO VERIFICABLE" data-en="VERIFIABLE PROTOTYPE">PROTOTIPO VERIFICABLE</span><h4 data-es="Mapa" data-en="Map">Mapa</h4><p data-es="Prototipo cartográfico con MapLibre GL JS y teselas de OpenStreetMap." data-en="Cartographic prototype using MapLibre GL JS and OpenStreetMap tiles.">Prototipo cartográfico con MapLibre GL JS y teselas de OpenStreetMap.</p></article><article><span data-es="PLANIFICADO" data-en="PLANNED">PLANIFICADO</span><h4 data-es="Recorridos e integraciones" data-en="Routes and integrations">Recorridos e integraciones</h4><p data-es="Planificación, transporte y fuentes públicas de información." data-en="Planning, transport and public information sources.">Planificación, transporte y fuentes públicas de información.</p></article><article><span data-es="PLANIFICADO" data-en="PLANNED">PLANIFICADO</span><h4 data-es="Comunidad" data-en="Community">Comunidad</h4><p data-es="Opiniones, reseñas y propuestas de nuevos lugares." data-en="Reviews, ratings and proposals for new places.">Opiniones, reseñas y propuestas de nuevos lugares.</p></article></div></section></div><div class="rumbo-case-gallery"><figure><img src="img/rumbo-sierras-premium.jpg" alt="Dirección visual conceptual de sierras uruguayas"><figcaption data-es="SIERRAS / EXPLORACIÓN" data-en="HIGHLANDS / EXPLORATION">SIERRAS / EXPLORACIÓN</figcaption></figure><figure><img src="img/rumbo-montevideo-premium.jpg" alt="Dirección visual conceptual de Montevideo"><figcaption>MONTEVIDEO / CITY</figcaption></figure></div><footer><div><p class="overline" data-es="DESARROLLO TÉCNICO" data-en="TECHNICAL DEVELOPMENT">DESARROLLO TÉCNICO</p><h3>MapLibre GL JS · OpenStreetMap</h3><p data-es="Tecnologías verificadas en el prototipo cartográfico presentado. La arquitectura final, APIs y servicios del producto aún no se publican porque continúan en definición." data-en="Technologies verified in the presented cartographic prototype. The final architecture, APIs and product services are not published because they remain under definition.">Tecnologías verificadas en el prototipo cartográfico presentado. La arquitectura final, APIs y servicios del producto aún no se publican porque continúan en definición.</p></div><strong data-es="PROYECTO EN DESARROLLO" data-en="PROJECT IN DEVELOPMENT">PROYECTO EN DESARROLLO</strong></footer></dialog>
-  <dialog id="detail-dialog"><button class="dialog-close" type="button" aria-label="Cerrar">×</button><p>PROJECT / CONTEXT</p><h2></h2><div class="dialog-copy"></div><small></small></dialog>
+
+  <!-- Editorial Author Footer (Joonas Sandell inspired) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-bio">
+          <a class="brand-link" href="#top">
+            <img class="brand-avatar" src="assets/img/alex.jpg" alt="Alexander Lemos" width="32" height="32" loading="lazy" decoding="async">
+            <span class="brand-name">Alexander Lemos</span>
+          </a>
+          <p data-es="Backend & Full-Stack Software Developer en Montevideo. Enfoque en C#/.NET, Java/Spring Boot, PHP, SQL y productos bien resueltos." data-en="Backend & Full-Stack Software Developer in Montevideo. Focused on C#/.NET, Java/Spring Boot, PHP, SQL and well-crafted products.">Backend &amp; Full-Stack Software Developer en Montevideo. Enfoque en C#/.NET, Java/Spring Boot, PHP, SQL y productos bien resueltos.</p>
+          <button class="btn btn-ghost" type="button" data-copy-email data-cursor="Copiar" data-cursor-en="Copy">
+            <span data-es="Copiar alexlemos2297@gmail.com" data-en="Copy alexlemos2297@gmail.com">Copiar alexlemos2297@gmail.com</span>
+          </button>
+        </div>
+
+        <div class="footer-col">
+          <h3>Me</h3>
+          <ul>
+            <li><a href="#top" data-es="Inicio" data-en="Home">Inicio</a></li>
+            <li><a href="#work" data-es="Proyectos" data-en="Work">Proyectos</a></li>
+            <li><a href="#lab">Systems Lab</a></li>
+            <li><a href="#stack" data-es="Stack técnico" data-en="Tech Stack">Stack técnico</a></li>
+            <li><a href="#about" data-es="Trayectoria" data-en="Trajectory">Trayectoria</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Projects</h3>
+          <ul>
+            <li><button type="button" data-case="bios-work">BIOS Work (Spring Boot)</button></li>
+            <li><button type="button" data-case="bios-fitness">BIOS Fitness (Flutter)</button></li>
+            <li><button type="button" data-case="ops-systems" data-es="Sistemas Operativos (NDA)" data-en="Operational Systems (NDA)">Sistemas Operativos (NDA)</button></li>
+            <li><a href="https://github.com/alexlemos2217/pixel-rush" target="_blank" rel="noopener noreferrer">Pixel Rush ↗</a></li>
+            <li><a href="https://pokedexalex.netlify.app/" target="_blank" rel="noopener noreferrer">Pokédex ↗</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Socials</h3>
+          <ul>
+            <li><a href="https://github.com/alexlemos2217" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
+            <li><a href="https://www.linkedin.com/in/alexlemos22" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
+            <li><a href="mailto:alexlemos2297@gmail.com">Email ↗</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> Alexander Lemos ✳︎ Montevideo, UY</span>
+        <div class="footer-bottom-links">
+          <a href="https://github.com/alexlemos2217/portfolio" target="_blank" rel="noopener noreferrer">View source ↗</a>
+          <a href="#top" data-es="Arriba ↑" data-en="Back to top ↑">Arriba ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Smart Custom Cursor (Desktop fine pointer only) -->
+  <div class="custom-cursor" aria-hidden="true">
+    <div class="cursor-shell">
+      <span class="cursor-label"></span>
+    </div>
+  </div>
+
+  <!-- Floating Archive Preview Card -->
+  <div class="archive-preview" aria-hidden="true">
+    <div class="archive-preview-bar"></div>
+    <span class="archive-preview-type"></span>
+    <h4></h4>
+    <p></p>
+    <div class="archive-preview-stack"></div>
+  </div>
+
+  <!-- Case Study Slide-Over Drawer -->
+  <dialog class="case-drawer" id="case-drawer" aria-labelledby="drawer-title">
+    <div class="drawer-header">
+      <span class="drawer-kicker"></span>
+      <button class="drawer-close" type="button" aria-label="Cerrar" data-aria-es="Cerrar" data-aria-en="Close">×</button>
+    </div>
+    <div class="drawer-content"></div>
+  </dialog>
+
+  <!-- Command Palette (Ctrl + K / ⌘ + K) -->
+  <dialog class="cmd-dialog" id="cmd-dialog" aria-label="Paleta de comandos" data-aria-es="Paleta de comandos" data-aria-en="Command palette">
+    <div class="cmd-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m20 20-3.5-3.5"></path>
+      </svg>
+      <input
+        id="cmd-input"
+        type="search"
+        placeholder="Buscar secciones, proyectos o acciones..."
+        data-placeholder-es="Buscar secciones, proyectos o acciones..."
+        data-placeholder-en="Search sections, projects or actions..."
+      >
+      <span class="cmd-esc">ESC</span>
+    </div>
+    <ul class="cmd-list" id="cmd-list"></ul>
+    <div class="cmd-footer">
+      <span data-es="↑↓ navegar · Enter ejecutar" data-en="↑↓ navigate · Enter run">↑↓ navegar · Enter ejecutar</span>
+      <span>Ctrl + K</span>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

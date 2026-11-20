@@ -1,0 +1,114 @@
+/* ==========================================================================
+   Design Tokens — Tactile Editorial Engineering
+   ========================================================================== */
+
+:root {
+  /* Core Surfaces */
+  --bg: #07080a;
+  --bg-elevated: #0c0e12;
+  --surface: #101319;
+  --surface-2: #151922;
+  --surface-glass: rgba(13, 15, 20, 0.76);
+
+  /* Specular Borders & Hairlines */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-specular: rgba(255, 255, 255, 0.22);
+
+  /* Typography Ink (WCAG AA+ on #07080a & #101319) */
+  --ink: #f5f6f8;
+  --ink-secondary: #a4acb9;
+  --ink-muted: #7d8594;
+
+  /* Dynamic Accent & Ambient Aura (shifts smoothly per active section) */
+  --accent: #5b8cff;
+  --accent-rgb: 91, 140, 255;
+  --aura-a: #38bdf8;
+  --aura-b: #6366f1;
+
+  /* Semantic Accents */
+  --emerald: #34d399;
+  --emerald-rgb: 52, 211, 153;
+  --amber: #fb923c;
+  --amber-rgb: 251, 146, 60;
+  --violet: #a78bfa;
+  --violet-rgb: 167, 139, 250;
+  --cyan: #38bdf8;
+  --cyan-rgb: 56, 189, 248;
+  --rose: #fb7185;
+
+  /* JSON Syntax Highlighting */
+  --syn-key: #93c5fd;
+  --syn-str: #6ee7b7;
+  --syn-num: #fdba74;
+  --syn-bool: #c4b5fd;
+  --syn-punct: #64748b;
+
+  /* Type Families */
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Layout & Spacing */
+  --container: 1200px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --section-gap: clamp(96px, 12vw, 156px);
+
+  /* Radii */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 180ms;
+  --t-med: 380ms;
+  --t-slow: 720ms;
+
+  /* Layers */
+  --z-grain: 50;
+  --z-nav: 100;
+  --z-preview: 160;
+  --z-cursor: 240;
+  --z-toast: 300;
+  --z-dialog: 400;
+}
+
+/* Section-aware accent & ambient aurora states applied on <body> by scroll observer */
+body[data-theme='hero'] {
+  --accent: #5b8cff;
+  --accent-rgb: 91, 140, 255;
+  --aura-a: #38bdf8;
+  --aura-b: #6366f1;
+}
+
+body[data-theme='bios-work'] {
+  --accent: #34d399;
+  --accent-rgb: 52, 211, 153;
+  --aura-a: #34d399;
+  --aura-b: #059669;
+}
+
+body[data-theme='bios-fitness'] {
+  --accent: #3b82f6;
+  --accent-rgb: 59, 130, 246;
+  --aura-a: #3b82f6;
+  --aura-b: #06b6d4;
+}
+
+body[data-theme='ops-systems'] {
+  --accent: #a78bfa;
+  --accent-rgb: 167, 139, 250;
+  --aura-a: #a78bfa;
+  --aura-b: #f59e0b;
+}
+
+body[data-theme='lab'] {
+  --accent: #38bdf8;
+  --accent-rgb: 56, 189, 248;
+  --aura-a: #8b5cf6;
+  --aura-b: #f59e0b;
+}
